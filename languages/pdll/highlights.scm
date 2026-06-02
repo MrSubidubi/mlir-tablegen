@@ -58,17 +58,15 @@
 (rewrite_decl . (identifier) @function)
 (constraint_decl . (identifier) @type)
 
-;; Op name inside op<ns.name> and string forms
-(op_expr "<" (identifier) @constant ">")
-(op_expr "<" (string) @constant ">")
+;; Negated native constraint calls: `not Constraint(...)`
+(negated_call_expr
+  "not" @keyword
+  (identifier) @function)
 
-;; Inner name of built-in type constraints:
-;;   Op<my.dialect>, Op<"my.dialect">  — direct identifier/string child
-;;   Attr<x>, Type<x>, Value<x>, ValueRange<x>, TypeRange<x>
-;;     — wrapped in an inner type_constraint by the grammar
-(type_constraint "<" (identifier) @constant ">")
-(type_constraint "<" (string) @constant ">")
-(type_constraint "<" (type_constraint (identifier) @constant) ">")
+;; Op names inside op<ns.name> / Op<ns.name>. The parser now wraps these in
+;; `op_name` so dotted names do not get mistaken for member access.
+(op_name (identifier) @constant)
+(op_name (string) @constant)
 
 ;; Brackets
 [
