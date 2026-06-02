@@ -6,12 +6,6 @@ For shipped milestones and tag-by-tag release history, see [CHANGELOG.md](../CHA
 
 ## Near-term
 
-### v0.6.0 — First-class TableGen navigation
-
-- **`outline.scm` for TableGen.** MLIR and PDLL already populate the symbol outline; TableGen does not. Add captures for named `class`, `def`, `defm`, `multiclass`, `defset`, and useful top-level `defvar` / `deftype` declarations so real symbols show up in the outline panel and `Cmd/Ctrl+Shift+O` symbol picker. Treat `let ... in`, `foreach`, and `if` blocks as context only when useful; they are not standalone symbols. Skip anonymous `def` / `defm` records unless a stable, readable label can be produced.
-- **TableGen navigation docs and screenshots.** Update the README / Chinese README with the new TableGen outline behaviour and add a screenshot or short example that shows records appearing in Zed's outline / symbol picker.
-- **Corpus-backed TableGen query validation.** Validate the outline query and any supporting grammar fixes against a curated set of real MLIR / LLVM TableGen files, especially ODS-heavy dialect, op, pass, and interface definitions. Fix grammar or query edge cases surfaced by that validation before cutting v0.6.0.
-
 ### v0.6.x follow-ups
 
 - **Investigate lit-aware highlighting for `// RUN:` lines.** MLIR / PDLL / TableGen tests commonly use LLVM lit `RUN:` directives, but those directives are not plain bash: they support lit substitutions (`%s`, `%t`, `%{...}`, `%(line)`), continuations, and test-suite-specific tool substitution. Explore whether `highlights.scm` / `injections.scm` can highlight command-like structure without misrepresenting lit syntax as generic shell. Prefer explicit lit substitution captures and only inject `shellscript` into command spans if it behaves correctly on real LLVM / MLIR tests.
@@ -27,7 +21,7 @@ For shipped milestones and tag-by-tag release history, see [CHANGELOG.md](../CHA
 - **Semantic-token defaults.** If `mlir-lsp-server` reports semantic tokens with useful custom token types, ship a `semantic_token_rules.json` with sensible defaults so Zed's `combined` semantic-token mode layers cleanly on top of the tree-sitter highlights without users having to write rules by hand.
 - **Inlay hints.** Verify and document PDLL inlay hints from `mlir-pdll-lsp-server`; add MLIR inlay hints for SSA value types and block-argument types only if / when `mlir-lsp-server` supports `textDocument/inlayHint`.
 - **`.mlirbc` bytecode support.** Track Zed and `mlir-lsp-server` support for opening MLIR bytecode as editable text. `mlir-lsp-server` can inspect bytecode, but the extension still needs a Zed-side way to hand a binary `.mlirbc` buffer to the server as an editable text document; do not simply register `.mlirbc` as normal text unless that path is verified.
-- **TableGen grammar — broaden corpus coverage.** Beyond the focused v0.6.0 navigation validation set, keep extending and validating [`felixtensor/tree-sitter-tablegen`](https://github.com/felixtensor/tree-sitter-tablegen) against four corpora and gate version bumps on a CI harness that asserts zero `ERROR` nodes:
+- **TableGen grammar — broaden corpus coverage.** Beyond the focused navigation validation set, keep extending and validating [`felixtensor/tree-sitter-tablegen`](https://github.com/felixtensor/tree-sitter-tablegen) against four corpora and gate version bumps on a CI harness that asserts zero `ERROR` nodes:
   - **MLIR TableGen** — dialect / op / pass definitions under `mlir/include/mlir/` and `mlir/test/`
   - **LLVM TableGen** — target backends under `llvm/lib/Target/*/` (heavy use of intrinsics, patterns, register classes)
   - **Clang TableGen** — `clang/include/clang/Basic/{Attr,Diagnostic,StmtNodes,…}.td`

@@ -6,6 +6,37 @@ retroactively on the last commit that still declared version 0.1.0.
 
 For future plans, see [docs/ROADMAP.md](docs/ROADMAP.md).
 
+## [v0.6.0] - 2026-06-02
+
+### Added
+
+- Added TableGen symbol outline navigation for stable named records and useful
+  top-level declarations.
+- Added SSH remote development documentation.
+
+### Changed
+
+- Updated the TableGen grammar revision for merged object-name support.
+- Updated the PDLL grammar revision to the parser-aligned tree-sitter-pdll
+  commit.
+- Tightened PDLL word-character handling to match the updated lexer while
+  keeping dotted operation names selectable.
+
+### Improved
+
+- Improved MLIR highlighting for source locations.
+- Improved TableGen outline labels for computed object names.
+- Improved PDLL highlighting for the new `op_name` and `negated_call_expr`
+  parser nodes.
+
+### Fixed
+
+- Fixed TableGen outline truncation for paste, bang-operator, suffix, and
+  code-fragment object-name expressions.
+- Fixed PDLL outline captures to include only named top-level declarations.
+- Removed stale PDLL inline type-constraint highlight assumptions after the
+  parser update.
+
 ## [v0.5.3] - 2026-05-20
 
 ### Added
@@ -193,6 +224,7 @@ For future plans, see [docs/ROADMAP.md](docs/ROADMAP.md).
   [`felixtensor/tree-sitter-mlir`](https://github.com/felixtensor/tree-sitter-mlir)
   before the first tagged baseline.
 
+[v0.6.0]: https://github.com/felixtensor/zed-mlir-suite/compare/v0.5.3...v0.6.0
 [v0.5.3]: https://github.com/felixtensor/zed-mlir-suite/compare/v0.5.2...v0.5.3
 [v0.5.2]: https://github.com/felixtensor/zed-mlir-suite/compare/v0.5.1...v0.5.2
 [v0.5.1]: https://github.com/felixtensor/zed-mlir-suite/compare/v0.5.0...v0.5.1
