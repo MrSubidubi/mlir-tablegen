@@ -14,6 +14,7 @@
 ;; Keywords and Operation names
 (func_operation name: _ @function.builtin)
 (func_operation visibility: _ @attribute)
+(func_operation specifier: (function_specifier) @keyword)
 (func_operation "attributes" @attribute)
 (module_operation name: _ @function.builtin)
 (module_operation "attributes" @attribute)
@@ -94,6 +95,7 @@
 (affine_set ["symbol" "max" "min"] @keyword)
 (strided_layout "strided" @keyword)
 (strided_layout "offset" @keyword)
+(distinct_attribute "distinct" @keyword)
 ["ceildiv" "floordiv" "mod"] @operator
 
 ;; Locations
@@ -128,6 +130,12 @@
 ;; wins under Zed's last-match-wins semantics.
 (bare_id) @keyword
 
+;; Recent parser versions treat some custom/dialect body words as anonymous
+;; tokens so they no longer match the bare_id fallback above.
+(custom_operation ["array" "sparse" "tensor" "vector"] @keyword)
+(pretty_dialect_item_body
+  ["array" "dense" "opaque" "sparse" "tensor" "vector"] @keyword)
+
 ;; Handle name inside dense_resource<...> — must come after the bare_id
 ;; catch-all so it wins under last-match-wins.
 (dense_resource_literal (bare_id) @constant.builtin)
@@ -153,8 +161,9 @@
   ","
 ] @punctuation.delimiter
 
-;; Variadic
+;; Variadic / dynamic markers
 (variadic) @punctuation.special
+"?" @punctuation.special
 
 ;; Operators
 [
