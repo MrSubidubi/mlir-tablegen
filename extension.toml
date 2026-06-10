@@ -20,12 +20,12 @@ commit = "8ba537e1742bc4f574bd9d6f76c45e91db7791d7"
 
 [language_servers.mlir-lsp-server]
 name = "mlir-lsp-server"
-language = "MLIR"
+languages = ["MLIR"]
 
 [language_servers.mlir-pdll-lsp-server]
 name = "mlir-pdll-lsp-server"
-language = "PDLL"
+languages = ["PDLL"]
 
 [language_servers.tblgen-lsp-server]
 name = "tblgen-lsp-server"
-language = "TableGen"
+languages = ["TableGen"]

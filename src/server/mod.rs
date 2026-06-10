@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use serde::Deserialize;
 use zed_extension_api::{self as zed, serde_json, settings::LspSettings, Result, Worktree};
 
@@ -54,7 +52,7 @@ const BUILD_DIR_CANDIDATES: &[&str] = &["build", "out"];
 /// The default implementation of [`resolve_command`](LanguageServer::resolve_command)
 /// handles the common boilerplate:
 /// - reading per-worktree `LspSettings` from Zed's `settings.json`
-/// - resolving the server binary from a user-provided path, cache, or `$PATH`
+/// - resolving the server binary from a user-provided path or `$PATH`
 /// - assembling the final `zed::Command` with arguments and environment variables
 /// - auto-detecting compilation-database files when the server declares candidates.
 pub trait LanguageServer {
@@ -95,11 +93,7 @@ pub trait LanguageServer {
     /// 1. Raw flags in `binary.arguments`
     /// 2. Structured fields in `settings`
     /// 3. Auto-detection from the worktree
-    fn resolve_command(
-        &self,
-        worktree: &Worktree,
-        path_cache: &mut HashMap<&'static str, String>,
-    ) -> Result<zed::Command> {
+    fn resolve_command(&self, worktree: &Worktree) -> Result<zed::Command> {
         let lsp_settings = LspSettings::for_worktree(self.id(), worktree).ok();
 
         let user_binary = lsp_settings.as_ref().and_then(|s| s.binary.as_ref());
@@ -128,7 +122,7 @@ pub trait LanguageServer {
             Some(path) => path,
             None => match settings.path {
                 Some(ref path) => path.clone(),
-                None => self.resolve_from_path(worktree, path_cache)?,
+                None => self.resolve_from_path(worktree)?,
             },
         };
 
@@ -169,7 +163,7 @@ pub trait LanguageServer {
 
         // Start with the worktree's shell environment and overlay
         // user-specified env vars from `binary.env` on top.
-        let mut env: Vec<(String, String)> = worktree.shell_env().into_iter().collect();
+        let mut env = worktree.shell_env();
         if let Some(user_env) = user_binary.and_then(|b| b.env.clone()) {
             for (k, v) in user_env {
                 env.retain(|(ek, _)| ek != &k);
@@ -180,17 +174,9 @@ pub trait LanguageServer {
         Ok(zed::Command { command, args, env })
     }
 
-    /// Look up the server binary on `$PATH`, with caching.
-    fn resolve_from_path(
-        &self,
-        worktree: &Worktree,
-        path_cache: &mut HashMap<&'static str, String>,
-    ) -> Result<String> {
-        if let Some(path) = path_cache.get(self.id()) {
-            return Ok(path.clone());
-        }
-
-        let path = worktree.which(self.default_binary()).ok_or_else(|| {
+    /// Look up the server binary on `$PATH`.
+    fn resolve_from_path(&self, worktree: &Worktree) -> Result<String> {
+        worktree.which(self.default_binary()).ok_or_else(|| {
             format!(
                 "`{}` not found. Install it from the LLVM project \
                  (`cmake --build . --target {}`) and either add it to \
@@ -199,10 +185,7 @@ pub trait LanguageServer {
                 self.default_binary(),
                 self.id()
             )
-        })?;
-
-        path_cache.insert(self.id(), path.clone());
-        Ok(path)
+        })
     }
 }
 
