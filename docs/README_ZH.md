@@ -13,6 +13,7 @@
 ## 功能特性
 
 - **Tree-sitter 语法高亮** — 覆盖 MLIR（`.mlir`）、TableGen（`.td`）和 PDLL（`.pdll`），在 403 个官方 MLIR 测试文件（涵盖 11 个核心 dialect）上实现 100% 通过率，几乎所有合法的 MLIR 语法都能正确高亮。
+- **C++ raw string 内嵌 MLIR 高亮** — 当 Zed 的 C++ raw-string injection 支持可用时，C++ `R"mlir(…)mlir"` 字符串中的 MLIR 会使用本扩展的 MLIR 高亮。
 - **一流的自定义 dialect 支持** — 用户自定义或外部 `dialect.op` 形式均可正确识别和高亮，你的项目自有 dialect 开箱即用。
 - **符号大纲** — 在大纲面板中导航 MLIR、TableGen 和 PDLL 符号。
 - **集成三种上游 LLVM Language Server**：
