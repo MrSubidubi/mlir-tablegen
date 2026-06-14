@@ -12,15 +12,15 @@
 (comment) @comment
 
 ;; Keywords and Operation names
-(func_operation name: _ @function.builtin)
+(func_operation name: _ @function)
 (func_operation visibility: _ @attribute)
 (func_operation specifier: (function_specifier) @keyword)
 (func_operation "attributes" @attribute)
-(module_operation name: _ @function.builtin)
+(module_operation name: _ @function)
 (module_operation "attributes" @attribute)
 
-(custom_op_name) @function.builtin
-(generic_operation (string_literal) @function.builtin)
+(custom_op_name) @function
+(generic_operation (string_literal) @function)
 
 ;; Types
 (builtin_type) @type.builtin
@@ -108,14 +108,13 @@
 ;; Strings
 (string_literal) @string
 (escape_sequence) @string.escape
-(invalid_escape) @error
 
 ;; Functions and symbols
 ;; func.func @name  →  @string.special.symbol  (function definition name)
-;; module @name     →  @module                 (module definition name)
+;; module @name     →  @string.special.symbol  (module definition name)
 ;; @any_other_sym   →  @string.special.symbol  (symbol reference)
 (func_operation sym_name: (symbol_ref_id) @string.special.symbol)
-(module_operation sym_name: (symbol_ref_id) @module)
+(module_operation sym_name: (symbol_ref_id) @string.special.symbol)
 (symbol_ref_id) @string.special.symbol
 
 ;; SSA values — @variable.special gives a distinct color
