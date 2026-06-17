@@ -1,30 +1,28 @@
-//! Completion-label classification for `label_for_completion`: each supported
-//! server maps a `Completion` to a Zed highlight name, wrapped in a single
-//! literal `CodeLabel` span.
+//! Completion-label classification for MLIR-family language servers.
+//!
+//! Labels arrive without request context or many original LSP fields, so these
+//! rules use only the server id plus `Completion` fields exposed by Zed.
 
+use crate::server::{MlirServer, PdllServer};
 use zed_extension_api::{self as zed, lsp::Completion, lsp::CompletionKind};
 
-/// Build a highlighted [`zed::CodeLabel`] for a completion item, dispatched by
-/// language-server ID. `None` falls back to Zed's default styling.
+/// Return a literal-span label, or `None` to keep Zed's default styling.
 pub fn label_for(server_id: &str, completion: &Completion) -> Option<zed::CodeLabel> {
     let highlight = match server_id {
-        "mlir-lsp-server" => mlir_completion_highlight(completion),
-        "mlir-pdll-lsp-server" => pdll_completion_highlight(completion),
+        MlirServer::SERVER_ID => mlir_completion_highlight(completion),
+        PdllServer::SERVER_ID => pdll_completion_highlight(completion),
         _ => return None,
     }?;
     Some(code_label_for_literal(&completion.label, highlight))
 }
 
-// Builtin-type / attribute labels mirror `mlir-lsp-server`'s hardcoded
-// completion menu (`completeType` / `completeAttribute` in MLIRServer.cpp),
-// which is intentionally smaller than the grammar's surface — track the server,
-// not tree-sitter-mlir.
+// Track the server's hardcoded completion menus, not the larger grammar.
 const MLIR_BUILTIN_TYPES: &[&str] = &[
     "memref", "tensor", "complex", "tuple", "vector", "bf16", "f16", "f32", "f64", "f80", "f128",
     "index", "none", "i<N>", "si<N>", "ui<N>",
 ];
 
-// `true` / `false` are excluded; they are colored as booleans below.
+// `true` / `false` are classified separately as booleans.
 const MLIR_BUILTIN_ATTRIBUTE_KEYWORDS: &[&str] = &[
     "affine_set",
     "affine_map",
@@ -40,10 +38,10 @@ const PDLL_CORE_CONSTRAINTS: &[&str] = &["Op", "Attr", "Type", "Value", "ValueRa
 
 fn code_label_for_literal(label: &str, highlight: &'static str) -> zed::CodeLabel {
     let label = label.to_string();
-    // Completion labels are ASCII bare-ids, so byte length == char length.
     let filter_range = (0..label.len() as u32).into();
     zed::CodeLabel {
-        // `code` is unused by literal spans; kept for a future CodeRange span.
+        // Literal spans do not index into `code`; keep it aligned for tools and
+        // any future CodeRange-based labels.
         code: label.clone(),
         spans: vec![zed::CodeLabelSpan::literal(
             label,
@@ -53,32 +51,26 @@ fn code_label_for_literal(label: &str, highlight: &'static str) -> zed::CodeLabe
     }
 }
 
-/// Classify an MLIR completion item; `None` keeps Zed's default styling.
-/// Branches are ordered most-specific first.
+/// Classify an MLIR completion item. Branch order is part of the policy.
 fn mlir_completion_highlight(completion: &Completion) -> Option<&'static str> {
     let kind = completion.kind.as_ref()?;
     let detail = completion.detail.as_deref();
     let label = &completion.label;
 
     if matches!(kind, CompletionKind::Variable) {
-        return Some("variable.special"); // SSA value
+        return Some("variable.special");
     }
 
     if matches!(kind, CompletionKind::Field) && label.starts_with('^') {
-        return Some("label"); // block name
+        return Some("label");
     }
 
-    // Dialect name. Before the alias branch so `builtin`, `#builtin` and
-    // `!builtin` share one color.
+    // Keep prefixed and unprefixed dialect names visually consistent.
     if matches!(kind, CompletionKind::Module) && detail == Some("dialect") {
         return Some("type");
     }
 
-    // Attribute / type alias, split by the `#` / `!` prefix.
-    // When the user has already typed `#` / `!`, the server emits aliases
-    // without the prefix (completeDialectAttributeOrAlias /
-    // completeDialectTypeOrAlias); those fall through to `None` because the
-    // prefix is the only way to tell attribute aliases from type aliases.
+    // Prefixless aliases are ambiguous after the trigger character is consumed.
     if matches!(kind, CompletionKind::Field) && detail.is_some_and(|d| d.starts_with("alias:")) {
         if label.starts_with('#') {
             return Some("attribute");
@@ -89,14 +81,14 @@ fn mlir_completion_highlight(completion: &Completion) -> Option<&'static str> {
     }
 
     if matches!(kind, CompletionKind::Keyword) {
-        return Some("keyword"); // expected token
+        return Some("keyword");
     }
 
     if matches!(kind, CompletionKind::Field) && detail == Some("operation") {
-        return Some("function"); // operation name
+        return Some("function");
     }
 
-    // Remaining `Field` items have no distinguishing detail: classify by label.
+    // Server-side `Field` is overloaded; detail-free items need label tables.
     if matches!(kind, CompletionKind::Field) {
         if MLIR_BUILTIN_TYPES.contains(&label.as_str()) {
             return Some("type.builtin");
@@ -112,18 +104,17 @@ fn mlir_completion_highlight(completion: &Completion) -> Option<&'static str> {
     None
 }
 
-/// Classify a PDLL completion item; `None` keeps Zed's default styling.
-/// Branches are ordered most-specific first.
+/// Classify a PDLL completion item. Branch order is part of the policy.
 fn pdll_completion_highlight(completion: &Completion) -> Option<&'static str> {
     let kind = completion.kind.as_ref()?;
     let detail = completion.detail.as_deref();
     let label = &completion.label;
 
     if matches!(kind, CompletionKind::Folder | CompletionKind::File) {
-        return Some("string"); // include path
+        return Some("string");
     }
 
-    // Constraint: core and inline-typed forms are builtins, others user types.
+    // Core and inline-typed constraints are builtins; user constraints are not.
     if matches!(kind, CompletionKind::Class) && detail.is_some_and(|d| d.ends_with(" constraint")) {
         if label.starts_with("Attr<")
             || label.starts_with("Value<")
@@ -138,28 +129,27 @@ fn pdll_completion_highlight(completion: &Completion) -> Option<&'static str> {
     }
 
     if matches!(kind, CompletionKind::Class) && detail == Some("pattern metadata") {
-        return Some("variable"); // benefit / recursion
+        return Some("variable");
     }
 
     if matches!(kind, CompletionKind::Class) && detail.is_none() {
-        return Some("type"); // dialect name
+        return Some("type");
     }
 
     if matches!(kind, CompletionKind::Interface) {
-        return Some("type"); // user constraint
+        return Some("type");
     }
 
     if matches!(kind, CompletionKind::Field) && detail.is_some_and(starts_with_digit_colon) {
-        return Some("property"); // tuple / result member, detail like "0: Value"
+        return Some("property");
     }
 
     if matches!(kind, CompletionKind::Field) && detail == Some("optional") {
-        return Some("property"); // optional operation attribute
+        return Some("property");
     }
 
-    // Operation name → "constant" (matches the grammar's `op_name`). A
-    // non-optional operation attribute sends an empty detail the server drops,
-    // so it is indistinguishable and lands here too.
+    // PDLL drops empty details before Zed sees them, so operation names and
+    // non-optional operation attributes are indistinguishable here.
     if matches!(kind, CompletionKind::Field) && detail.is_none() {
         return Some("constant");
     }
@@ -171,8 +161,7 @@ fn pdll_completion_highlight(completion: &Completion) -> Option<&'static str> {
     None
 }
 
-/// Whether `s` starts with one or more digits then `':'` — the shape of PDLL
-/// member details like "0: Value" or "10: ValueRange".
+/// Match PDLL member details such as `"0: Value"` or `"10: ValueRange"`.
 fn starts_with_digit_colon(s: &str) -> bool {
     let rest = s.trim_start_matches(|c: char| c.is_ascii_digit());
     rest.len() < s.len() && rest.starts_with(':')
@@ -181,6 +170,7 @@ fn starts_with_digit_colon(s: &str) -> bool {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::server::TablegenServer;
 
     fn completion(label: &str, kind: CompletionKind, detail: Option<&str>) -> Completion {
         Completion {
@@ -192,23 +182,18 @@ mod tests {
         }
     }
 
-    // --- dispatch ---
-
     #[test]
     fn unknown_server_is_none() {
-        // `CodeLabel` has no `PartialEq`, so assert on `is_none()`.
         let c = completion("%0", CompletionKind::Variable, None);
-        assert!(label_for("tblgen-lsp-server", &c).is_none());
+        assert!(label_for(TablegenServer::SERVER_ID, &c).is_none());
     }
 
     #[test]
     fn known_server_builds_label() {
         let c = completion("%0", CompletionKind::Variable, None);
-        let label = label_for("mlir-lsp-server", &c).expect("should classify");
+        let label = label_for(MlirServer::SERVER_ID, &c).expect("should classify");
         assert_eq!(label.code, "%0");
     }
-
-    // --- MLIR tests ---
 
     #[test]
     fn mlir_ssa_value() {
@@ -230,7 +215,6 @@ mod tests {
         let c = completion("builtin", CompletionKind::Module, Some("dialect"));
         assert_eq!(mlir_completion_highlight(&c), Some("type"));
 
-        // Prefixed dialects share the unprefixed color.
         let c = completion("#builtin", CompletionKind::Module, Some("dialect"));
         assert_eq!(mlir_completion_highlight(&c), Some("type"));
 
@@ -252,7 +236,6 @@ mod tests {
         let c = completion("affine_set", CompletionKind::Keyword, Some("optional"));
         assert_eq!(mlir_completion_highlight(&c), Some("keyword"));
 
-        // Keyword rule ignores detail.
         let c = completion("dense", CompletionKind::Keyword, None);
         assert_eq!(mlir_completion_highlight(&c), Some("keyword"));
     }
@@ -304,7 +287,6 @@ mod tests {
 
     #[test]
     fn mlir_dialect_before_prefix() {
-        // Dialect classification must win over the alias-prefix branch.
         let c = completion("#builtin", CompletionKind::Module, Some("dialect"));
         assert_eq!(
             mlir_completion_highlight(&c),
@@ -312,8 +294,6 @@ mod tests {
             "dialect must precede alias prefix"
         );
     }
-
-    // --- PDLL tests ---
 
     #[test]
     fn pdll_include_path() {
@@ -358,7 +338,6 @@ mod tests {
 
     #[test]
     fn pdll_other_constraint() {
-        // Non-core, non-inline constraint → "type".
         let c = completion("MyConstraint", CompletionKind::Class, Some("My constraint"));
         assert_eq!(pdll_completion_highlight(&c), Some("type"));
     }
@@ -409,7 +388,6 @@ mod tests {
 
     #[test]
     fn pdll_multi_digit_member() {
-        // A two-digit member index must still classify as a member.
         let c = completion(
             "10 (field #10)",
             CompletionKind::Field,
@@ -429,8 +407,6 @@ mod tests {
         let c = completion("AddOp", CompletionKind::Field, None);
         assert_eq!(pdll_completion_highlight(&c), Some("constant"));
 
-        // A non-optional operation attribute (empty detail dropped by the
-        // server) is indistinguishable and lands in the same branch.
         let c = completion("some_attr", CompletionKind::Field, None);
         assert_eq!(pdll_completion_highlight(&c), Some("constant"));
     }
