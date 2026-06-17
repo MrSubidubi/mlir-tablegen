@@ -39,15 +39,17 @@ const MLIR_BUILTIN_ATTRIBUTE_KEYWORDS: &[&str] = &[
 const PDLL_CORE_CONSTRAINTS: &[&str] = &["Op", "Attr", "Type", "Value", "ValueRange", "TypeRange"];
 
 fn code_label_for_literal(label: &str, highlight: &'static str) -> zed::CodeLabel {
+    let label = label.to_string();
+    // Completion labels are ASCII bare-ids, so byte length == char length.
+    let filter_range = (0..label.len() as u32).into();
     zed::CodeLabel {
         // `code` is unused by literal spans; kept for a future CodeRange span.
-        code: label.to_string(),
+        code: label.clone(),
         spans: vec![zed::CodeLabelSpan::literal(
-            label.to_string(),
+            label,
             Some(highlight.to_string()),
         )],
-        // Completion labels are ASCII bare-ids, so byte length == char length.
-        filter_range: (0..label.len() as u32).into(),
+        filter_range,
     }
 }
 
@@ -73,6 +75,10 @@ fn mlir_completion_highlight(completion: &Completion) -> Option<&'static str> {
     }
 
     // Attribute / type alias, split by the `#` / `!` prefix.
+    // When the user has already typed `#` / `!`, the server emits aliases
+    // without the prefix (completeDialectAttributeOrAlias /
+    // completeDialectTypeOrAlias); those fall through to `None` because the
+    // prefix is the only way to tell attribute aliases from type aliases.
     if matches!(kind, CompletionKind::Field) && detail.is_some_and(|d| d.starts_with("alias:")) {
         if label.starts_with('#') {
             return Some("attribute");
