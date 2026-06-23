@@ -6,6 +6,42 @@ retroactively on the last commit that still declared version 0.1.0.
 
 For future plans, see [docs/ROADMAP.md](docs/ROADMAP.md).
 
+## [v0.6.1] - 2026-06-23
+
+### Added
+
+- Added rich completion labels for the MLIR and PDLL language servers,
+  classifying values, blocks, dialects, aliases, operations, builtin types,
+  attributes, constraints, and include paths by their LSP kind and detail.
+- Added unit tests for the completion-label classification helpers.
+- Documented MLIR syntax highlighting inside C++ raw string literals.
+
+### Changed
+
+- Migrated `extension.toml` language-server metadata to the `languages = [...]`
+  field; the deprecated singular `language` field is no longer used.
+- Bumped the MLIR grammar revision to align with tree-sitter-mlir v0.1.3 and
+  v0.1.6.
+- Added `publish = false` and the Apache-2.0 WITH LLVM-exception license to
+  `Cargo.toml` to match the repository `LICENSE` file.
+- Added `cargo test --lib` to the CI workflow.
+
+### Improved
+
+- Improved MLIR highlighting coverage for new parser nodes and anonymous tokens
+  introduced by the grammar updates.
+- Improved MLIR and TableGen highlight capture names to match Zed's documented
+  highlight set.
+- Improved PDLL constraint classification by base name instead of a hardcoded
+  prefix list.
+
+### Fixed
+
+- Fixed language-server binary resolution to probe `PATH` per worktree instead
+  of reusing a shared cache across worktrees.
+- Fixed coloring for prefix-stripped MLIR attribute and type aliases in
+  completions.
+
 ## [v0.6.0] - 2026-06-02
 
 ### Added
@@ -224,6 +260,7 @@ For future plans, see [docs/ROADMAP.md](docs/ROADMAP.md).
   [`felixtensor/tree-sitter-mlir`](https://github.com/felixtensor/tree-sitter-mlir)
   before the first tagged baseline.
 
+[v0.6.1]: https://github.com/felixtensor/zed-mlir-suite/compare/v0.6.0...v0.6.1
 [v0.6.0]: https://github.com/felixtensor/zed-mlir-suite/compare/v0.5.3...v0.6.0
 [v0.5.3]: https://github.com/felixtensor/zed-mlir-suite/compare/v0.5.2...v0.5.3
 [v0.5.2]: https://github.com/felixtensor/zed-mlir-suite/compare/v0.5.1...v0.5.2

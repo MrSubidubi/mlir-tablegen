@@ -12,14 +12,15 @@
 
 ## Features
 
-- **Tree-sitter grammars** for MLIR (`.mlir`), TableGen (`.td`), and PDLL (`.pdll`) — 100% pass rate on 403 official MLIR test files across 11 core dialects, meaning virtually all valid MLIR syntax is highlighted correctly out of the box.
-- **MLIR inside C++ raw strings** — embedded MLIR is highlighted inside C++ `R"mlir(…)mlir"` strings when Zed's C++ raw-string injection support is available.
+- **Tree-sitter grammars** for MLIR (`.mlir`), TableGen (`.td`), and PDLL (`.pdll`) — 100% pass rate on 549 official MLIR test files across 24 dialect directories, meaning virtually all valid MLIR syntax is highlighted correctly out of the box.
+- **MLIR inside C++ raw strings** — when Zed's bundled C++ grammar injects `raw_string_content` by delimiter, MLIR inside `R"mlir(…)mlir"` strings is highlighted using this extension's MLIR grammar.
 - **First-class custom dialect support** — user-defined or out-of-tree `dialect.op` forms are recognized and highlighted correctly, so your project's own dialects just work.
 - **Symbol outline** — navigate symbols in MLIR, TableGen, and PDLL from the outline panel.
 - **Language Server integration** for all three upstream LLVM servers:
   - `mlir-lsp-server` for `.mlir`
   - `mlir-pdll-lsp-server` for `.pdll`
   - `tblgen-lsp-server` for `.td`
+- **Rich completion labels** — completion items from the MLIR and PDLL language servers are classified by their LSP kind and detail, so values, blocks, dialects, operations, types, attributes, constraints, and include paths are colored consistently.
 - **Editing ergonomics** — bracket matching, auto-close pairs, and indentation tuned for each language.
 
 ## Prerequisites
