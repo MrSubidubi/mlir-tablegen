@@ -70,14 +70,20 @@ fn mlir_completion_highlight(completion: &Completion) -> Option<&'static str> {
         return Some("type");
     }
 
-    // Prefixless aliases are ambiguous after the trigger character is consumed.
+    // Aliases arrive as `Field` with an `alias:` detail. At a fresh type/attr
+    // position the label keeps its `#`/`!` prefix, so attribute and type aliases
+    // are distinguishable. But once the user types the `#`/`!` trigger (the
+    // common autocomplete flow), the server strips the prefix
+    // (completeDialectTypeOrAlias / completeDialectAttributeOrAlias) and the two
+    // become indistinguishable per item. Default the prefixless form to "type"
+    // — the extension's general "named entity" color (also dialects, type
+    // aliases, user constraints) — so aliases stay colored instead of falling
+    // back to the default foreground. Flip to "attribute" if that reads better.
     if matches!(kind, CompletionKind::Field) && detail.is_some_and(|d| d.starts_with("alias:")) {
         if label.starts_with('#') {
             return Some("attribute");
         }
-        if label.starts_with('!') {
-            return Some("type");
-        }
+        return Some("type");
     }
 
     if matches!(kind, CompletionKind::Keyword) {
@@ -114,15 +120,13 @@ fn pdll_completion_highlight(completion: &Completion) -> Option<&'static str> {
         return Some("string");
     }
 
-    // Core and inline-typed constraints are builtins; user constraints are not.
+    // Core and inline-typed constraints are builtins; user constraints arrive as
+    // `Interface`, not here. Inline-typed forms append a type argument
+    // (`Attr<type>`), so match on the base name before `<`. An unrecognized name
+    // is a future/unknown constraint kind — fall back to "type".
     if matches!(kind, CompletionKind::Class) && detail.is_some_and(|d| d.ends_with(" constraint")) {
-        if label.starts_with("Attr<")
-            || label.starts_with("Value<")
-            || label.starts_with("ValueRange<")
-        {
-            return Some("type.builtin");
-        }
-        if PDLL_CORE_CONSTRAINTS.contains(&label.as_str()) {
+        let base = label.split('<').next().unwrap_or(label);
+        if PDLL_CORE_CONSTRAINTS.contains(&base) {
             return Some("type.builtin");
         }
         return Some("type");
@@ -228,6 +232,23 @@ mod tests {
         assert_eq!(mlir_completion_highlight(&c), Some("attribute"));
 
         let c = completion("!shape", CompletionKind::Field, Some("alias: ..."));
+        assert_eq!(mlir_completion_highlight(&c), Some("type"));
+    }
+
+    #[test]
+    fn mlir_alias_prefix_stripped() {
+        // When completion fires after the user types `!`/`#`, the server strips
+        // the prefix (completeDialectTypeOrAlias / completeDialectAttributeOrAlias).
+        // attr and type aliases become indistinguishable; both default to "type"
+        // so they still get colored instead of falling back to None.
+        let c = completion("my_type_alias", CompletionKind::Field, Some("alias: i32"));
+        assert_eq!(mlir_completion_highlight(&c), Some("type"));
+
+        let c = completion(
+            "my_attr_alias",
+            CompletionKind::Field,
+            Some("alias: 42 : i32"),
+        );
         assert_eq!(mlir_completion_highlight(&c), Some("type"));
     }
 
