@@ -41,6 +41,7 @@
   (integer_type)
   (index_type)
   (none_type)
+  (token_type)
 ] @type.builtin
 
 ;; Composite types not always reachable through (builtin_type)
