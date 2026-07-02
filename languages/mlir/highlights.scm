@@ -136,19 +136,11 @@
 (generic_operation (string_literal) @function)
 (escape_sequence) @string.escape
 
-;; Functions and symbols
-;; func.func @name  →  @string.special.symbol  (function definition name)
-;; module @name     →  @string.special.symbol  (module definition name)
-;; @any_other_sym   →  @string.special.symbol  (symbol reference)
-(func_operation sym_name: (symbol_ref_id) @string.special.symbol)
-(module_operation sym_name: (symbol_ref_id) @string.special.symbol)
+;; Symbols (@name) — all symbol references share one capture
 (symbol_ref_id) @string.special.symbol
 
 ;; SSA values — @variable.special gives a distinct color
-(value_use) @variable.special
-(func_arg_list (value_use) @variable.special)
-(block_arg_list (value_use) @variable.special)
-(op_result) @variable.special
+[(value_use) (op_result)] @variable.special
 
 ;; Fallback keyword for ad-hoc custom operation body tokens like `to`, `step`,
 ;; `ins`, and `outs`. Keep this scoped so attribute keys, affine dimensions,
