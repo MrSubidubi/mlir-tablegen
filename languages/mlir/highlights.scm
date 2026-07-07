@@ -122,6 +122,7 @@
 ["ceildiv" "floordiv" "mod"] @operator
 (pretty_dialect_item_body
   ["array" "dense" "opaque" "sparse" "tensor" "vector"] @keyword)
+(pretty_dialect_item_body (bare_id) @keyword)
 (pretty_dialect_item_body ["?" "*"] @punctuation.special)
 
 ;; Locations
