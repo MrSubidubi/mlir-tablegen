@@ -110,6 +110,8 @@
 ;; Builtin attribute and affine keywords
 (affine_map "affine_map" @constant.builtin)
 (affine_set "affine_set" @constant.builtin)
+(affine_map (bare_id) @variable.parameter)
+(affine_set (bare_id) @variable.parameter)
 (affine_map ["symbol" "max" "min"] @keyword)
 (affine_set ["symbol" "max" "min"] @keyword)
 (affine_map
