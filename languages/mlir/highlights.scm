@@ -88,8 +88,15 @@
   (uninitialized_literal)
 ] @constant.builtin
 
-(tensor_literal ["dense" "sparse"] @keyword)
-(array_literal "array" @keyword)
+;; Builtin attribute/literal introducers (dense, sparse, array, affine_map,
+;; affine_set, dense_resource) are @constant.builtin — the Zed translation of
+;; the VSCode grammar's constant.language anchor, not general syntax keywords
+;; like loc or structural fields like offset. Zed's official capture list has
+;; no @constructor.builtin, @constructor renders identical to @function in One
+;; Dark (op names), and @property stays reserved for key-side channels, so
+;; upstream's finer @constructor.builtin split deliberately flattens here.
+(tensor_literal ["dense" "sparse"] @constant.builtin)
+(array_literal "array" @constant.builtin)
 
 [
   (attribute_alias)
@@ -101,8 +108,8 @@
 (dictionary_attribute) @attribute
 
 ;; Builtin attribute and affine keywords
-(affine_map "affine_map" @keyword)
-(affine_set "affine_set" @keyword)
+(affine_map "affine_map" @constant.builtin)
+(affine_set "affine_set" @constant.builtin)
 (affine_map ["symbol" "max" "min"] @keyword)
 (affine_set ["symbol" "max" "min"] @keyword)
 (affine_map
@@ -118,7 +125,7 @@
 (strided_layout "offset" @keyword)
 (strided_layout ["?" "*"] @punctuation.special)
 (distinct_attribute "distinct" @keyword)
-(dense_resource_literal "dense_resource" @keyword)
+(dense_resource_literal "dense_resource" @constant.builtin)
 ["ceildiv" "floordiv" "mod"] @operator
 (pretty_dialect_item_body
   ["array" "dense" "opaque" "sparse" "tensor" "vector"] @keyword)
