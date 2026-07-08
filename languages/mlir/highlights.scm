@@ -16,6 +16,9 @@
 (func_operation visibility: _ @keyword)
 (func_operation specifier: (function_specifier) @keyword)
 (func_operation "attributes" @attribute)
+;; llvm.func post-signature clause introducers.
+(vscale_range "vscale_range" @keyword)
+(comdat "comdat" @keyword)
 (module_operation name: _ @function)
 (module_operation "attributes" @attribute)
 
@@ -64,6 +67,7 @@
 (vector_dim_list "x" @punctuation.delimiter)
 (dim_list ["?" "*"] @punctuation.special)
 (dialect_dim_list ["?" "*"] @punctuation.special)
+(custom_body_dim_list "?" @punctuation.special)
 
 [
   (type_alias)
