@@ -13,7 +13,7 @@
 
 ;; Keywords and Operation names
 (func_operation name: _ @function)
-(func_operation visibility: _ @attribute)
+(func_operation visibility: _ @keyword)
 (func_operation specifier: (function_specifier) @keyword)
 (func_operation "attributes" @attribute)
 (module_operation name: _ @function)
