@@ -22,16 +22,24 @@ const MLIR_BUILTIN_TYPES: &[&str] = &[
     "index", "none", "i<N>", "si<N>", "ui<N>",
 ];
 
-// `true` / `false` are classified separately as booleans.
-const MLIR_BUILTIN_ATTRIBUTE_KEYWORDS: &[&str] = &[
-    "affine_set",
+// Attribute-value introducers that take a payload (dense<…>, affine_map<…>,
+// sparse<…>) plus the bare `unit` literal. Upstream tree-sitter-mlir tags the
+// payload forms `@constructor.builtin`; the extension's highlights.scm flattens
+// that to `@constant.builtin` (Zed has no `@constructor.builtin`), so
+// completion uses the same capture to stay visually consistent with the buffer.
+const MLIR_BUILTIN_ATTR_LITERALS: &[&str] = &[
     "affine_map",
+    "affine_set",
     "dense",
     "dense_resource",
-    "loc",
     "sparse",
     "unit",
 ];
+
+// `loc` is a keyword-proper in the grammar, not a literal introducer.
+const MLIR_BUILTIN_ATTR_KEYWORDS: &[&str] = &["loc"];
+
+// `true` / `false` are classified separately as booleans.
 
 // PDLL core constraints, from PDLLServer.cpp `completeCoreConstraint`.
 const PDLL_CORE_CONSTRAINTS: &[&str] = &["Op", "Attr", "Type", "Value", "ValueRange", "TypeRange"];
@@ -102,7 +110,10 @@ fn mlir_completion_highlight(completion: &Completion) -> Option<&'static str> {
         if label == "true" || label == "false" {
             return Some("boolean");
         }
-        if MLIR_BUILTIN_ATTRIBUTE_KEYWORDS.contains(&label.as_str()) {
+        if MLIR_BUILTIN_ATTR_LITERALS.contains(&label.as_str()) {
+            return Some("constant.builtin");
+        }
+        if MLIR_BUILTIN_ATTR_KEYWORDS.contains(&label.as_str()) {
             return Some("keyword");
         }
     }
@@ -156,10 +167,6 @@ fn pdll_completion_highlight(completion: &Completion) -> Option<&'static str> {
     // non-optional operation attributes are indistinguishable here.
     if matches!(kind, CompletionKind::Field) && detail.is_none() {
         return Some("constant");
-    }
-
-    if matches!(kind, CompletionKind::Keyword) {
-        return Some("keyword");
     }
 
     None
@@ -289,15 +296,35 @@ mod tests {
     }
 
     #[test]
-    fn mlir_builtin_attribute_keyword() {
-        for name in &["dense", "affine_map", "affine_set", "loc", "sparse", "unit"] {
+    fn mlir_builtin_attribute_constant() {
+        // Payload-taking introducers (dense, sparse, affine_map, ...) plus the
+        // bare `unit` literal render as @constant.builtin in the grammar
+        // (languages/mlir/highlights.scm; upstream tags the payload forms
+        // @constructor.builtin, which Zed flattens to @constant.builtin), so
+        // completion matches the buffer.
+        for name in &[
+            "affine_map",
+            "affine_set",
+            "dense",
+            "dense_resource",
+            "sparse",
+            "unit",
+        ] {
             let c = completion(name, CompletionKind::Field, None);
             assert_eq!(
                 mlir_completion_highlight(&c),
-                Some("keyword"),
-                "builtin attribute keyword {name} should map to keyword",
+                Some("constant.builtin"),
+                "builtin attribute introducer {name} should map to constant.builtin",
             );
         }
+    }
+
+    #[test]
+    fn mlir_builtin_attribute_keyword() {
+        // `loc` is the one builtin-attribute name the grammar renders as
+        // @keyword (trailing_location / location), not @constant.builtin.
+        let c = completion("loc", CompletionKind::Field, None);
+        assert_eq!(mlir_completion_highlight(&c), Some("keyword"));
     }
 
     #[test]
@@ -339,20 +366,26 @@ mod tests {
 
     #[test]
     fn pdll_inline_typed_constraint() {
-        let c = completion("Attr<type>", CompletionKind::Class, Some("Attr constraint"));
+        // Server sends detail "Attr<type> constraint" for the inline form
+        // (template argument appended to the constraint name before the suffix).
+        let c = completion(
+            "Attr<type>",
+            CompletionKind::Class,
+            Some("Attr<type> constraint"),
+        );
         assert_eq!(pdll_completion_highlight(&c), Some("type.builtin"));
 
         let c = completion(
             "Value<type>",
             CompletionKind::Class,
-            Some("Value constraint"),
+            Some("Value<type> constraint"),
         );
         assert_eq!(pdll_completion_highlight(&c), Some("type.builtin"));
 
         let c = completion(
             "ValueRange<type>",
             CompletionKind::Class,
-            Some("ValueRange constraint"),
+            Some("ValueRange<type> constraint"),
         );
         assert_eq!(pdll_completion_highlight(&c), Some("type.builtin"));
     }
@@ -433,9 +466,11 @@ mod tests {
     }
 
     #[test]
-    fn pdll_keyword() {
+    fn pdll_keyword_kind_unclassified() {
+        // PDLLServer never emits CompletionItemKind::Keyword, so it is left to
+        // Zed's default styling rather than force-colored.
         let c = completion("some_keyword", CompletionKind::Keyword, None);
-        assert_eq!(pdll_completion_highlight(&c), Some("keyword"));
+        assert_eq!(pdll_completion_highlight(&c), None);
     }
 
     #[test]
