@@ -7,6 +7,7 @@
 
 ;; Strings and embedded C++ code block (`[{ ... }]`)
 (string) @string
+(escape_sequence) @string.escape
 (code_block) @string.special
 
 ;; Numbers
@@ -34,8 +35,8 @@
 ] @keyword
 
 ;; Pattern metadata (Pattern Foo with benefit(1), recursion { ... })
-(benefit_metadata "benefit" @variable)
-(recursion_metadata) @variable
+(benefit_metadata "benefit" @keyword)
+(recursion_metadata) @keyword
 
 ;; op<...> / attr<"..."> / type<"..."> expression keywords
 (op_expr "op" @keyword)
