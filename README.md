@@ -12,7 +12,7 @@
 
 ## Features
 
-- **Tree-sitter grammars** for MLIR (`.mlir`), TableGen (`.td`), and PDLL (`.pdll`) — 100% pass rate on 549 official MLIR test files across 24 dialect directories, meaning virtually all valid MLIR syntax is highlighted correctly out of the box.
+- **Tree-sitter grammars** for MLIR (`.mlir`), TableGen (`.td`), and PDLL (`.pdll`) — 100% pass rate on 566 official MLIR test files across 24 dialect directories, meaning virtually all valid MLIR syntax is highlighted correctly out of the box.
 - **MLIR inside C++ raw strings** — when Zed's bundled C++ grammar injects `raw_string_content` by delimiter, MLIR inside `R"mlir(…)mlir"` strings is highlighted using this extension's MLIR grammar.
 - **First-class custom dialect support** — user-defined or out-of-tree `dialect.op` forms are recognized and highlighted correctly, so your project's own dialects just work.
 - **Symbol outline** — navigate symbols in MLIR, TableGen, and PDLL from the outline panel.
