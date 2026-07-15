@@ -158,6 +158,14 @@ After changing settings, open the command palette (`Cmd+Shift+P` on macOS, `Ctrl
 
 ## Screenshots
 
+### Out-of-Tree Dialect Highlighting
+
+![Out-of-Tree Dialect Highlighting](https://raw.githubusercontent.com/felixtensor/zed-mlir-suite/assets/screenshots/downstream-triton.png)
+
+### MLIR in C++ Raw Strings
+
+![MLIR in C++ Raw Strings](https://raw.githubusercontent.com/felixtensor/zed-mlir-suite/assets/screenshots/cpp-inject-mlir.png)
+
 ### Go to Definition
 
 ![Go to Definition](https://raw.githubusercontent.com/felixtensor/zed-mlir-suite/assets/screenshots/go-to-definition.gif)
@@ -191,6 +199,8 @@ This extension builds on:
 - [tree-sitter-tablegen](https://github.com/felixtensor/tree-sitter-tablegen) — Tree-sitter grammar for TableGen.
 - [tree-sitter-pdll](https://github.com/felixtensor/tree-sitter-pdll) — Tree-sitter grammar for PDLL.
 - The three LSP servers (`mlir-lsp-server`, `mlir-pdll-lsp-server`, `tblgen-lsp-server`) are part of the [LLVM project](https://github.com/llvm/llvm-project).
+
+The out-of-tree dialect screenshot uses a TritonGPU test file from [Triton](https://github.com/triton-lang/triton).
 
 For MLIR tooling in other editors, see:
 

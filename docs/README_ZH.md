@@ -158,6 +158,14 @@ cmake --build . --target mlir-lsp-server mlir-pdll-lsp-server tblgen-lsp-server
 
 ## 截图
 
+### 外部 dialect 高亮
+
+![Out-of-Tree Dialect Highlighting](https://raw.githubusercontent.com/felixtensor/zed-mlir-suite/assets/screenshots/downstream-triton.png)
+
+### C++ raw string 内嵌 MLIR
+
+![MLIR in C++ Raw Strings](https://raw.githubusercontent.com/felixtensor/zed-mlir-suite/assets/screenshots/cpp-inject-mlir.png)
+
 ### 跳转到定义
 
 ![Go to Definition](https://raw.githubusercontent.com/felixtensor/zed-mlir-suite/assets/screenshots/go-to-definition.gif)
@@ -191,6 +199,8 @@ cmake --build . --target mlir-lsp-server mlir-pdll-lsp-server tblgen-lsp-server
 - [tree-sitter-tablegen](https://github.com/felixtensor/tree-sitter-tablegen) — TableGen 的 Tree-sitter 语法。
 - [tree-sitter-pdll](https://github.com/felixtensor/tree-sitter-pdll) — PDLL 的 Tree-sitter 语法。
 - 三个 LSP 服务器（`mlir-lsp-server`、`mlir-pdll-lsp-server`、`tblgen-lsp-server`）是 [LLVM 项目](https://github.com/llvm/llvm-project) 的一部分。
+
+外部 dialect 高亮截图使用了 [Triton](https://github.com/triton-lang/triton) 仓库中的 TritonGPU 测试文件。
 
 其他编辑器中的 MLIR 工具：
 
