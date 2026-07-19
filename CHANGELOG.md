@@ -6,6 +6,39 @@ retroactively on the last commit that still declared version 0.1.0.
 
 For future plans, see [docs/ROADMAP.md](docs/ROADMAP.md).
 
+## [v0.6.2] - 2026-07-19
+
+### Added
+
+- Added highlighting for MLIR builtin `token` types, pretty-dialect bare
+  identifiers, affine identifiers, LLVM function clauses, and dynamic
+  dimension markers.
+- Added English and Chinese README screenshots for out-of-tree dialect syntax
+  and injected C++ highlighting.
+
+### Changed
+
+- Updated the MLIR grammar to tree-sitter-mlir v0.1.10 and the PDLL grammar to
+  tree-sitter-pdll v0.1.1.
+- Reworked the roadmap around concrete query, grammar-pin, and current-Zed
+  compatibility follow-ups, while moving LLVM- or Zed-gated ideas out of the
+  executable plan.
+- Updated the documented MLIR example corpus baseline to 566 files.
+
+### Improved
+
+- Aligned MLIR completion-label colors with source highlighting for builtin
+  attribute introducers.
+- Refined PDLL highlighting for escapes, pattern metadata, user-defined type
+  constraints, parameters, operation attribute keys, and call targets.
+
+### Fixed
+
+- Fixed MLIR highlighting roles for builtin literal introducers,
+  `func.func` visibility, and affine dimensions and symbols.
+- Fixed PDLL identifiers that fell back to generic variable coloring after the
+  v0.1.1 grammar update.
+
 ## [v0.6.1] - 2026-06-23
 
 ### Added

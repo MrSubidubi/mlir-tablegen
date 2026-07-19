@@ -739,7 +739,7 @@ dependencies = [
 
 [[package]]
 name = "zed-mlir-suite"
-version = "0.6.1"
+version = "0.6.2"
 dependencies = [
  "serde",
  "zed_extension_api",
