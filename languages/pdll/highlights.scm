@@ -48,11 +48,23 @@
 ;; the same identifier node overrides this fallback.
 (identifier) @variable
 (variable_def (identifier) @variable)
-(call_expr (identifier) @variable)
+(call_expr (identifier) @function)
 
 ;; Built-in type constraints
 (type_constraint
   ["Op" "Attr" "Type" "Value" "ValueRange" "TypeRange"] @type.builtin)
+
+;; User-defined type constraints in type position
+(type_constraint
+  (identifier) @type)
+
+;; Parameter names (includes contextual keywords aliased to identifier)
+(argument (identifier) @variable.parameter)
+(named_type_constraint (identifier) @variable.parameter)
+
+;; Operation attribute keys
+(op_attribute
+  [(identifier) (string)] @attribute)
 
 ;; Declaration names
 (pattern_decl . (identifier) @function)
