@@ -42,20 +42,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 On Windows, download and run `rustup-init.exe` from [rustup.rs](https://rustup.rs).
 
-Then add the WebAssembly target Zed extensions compile against:
-
-```bash
-rustup target add wasm32-wasip2
-```
-
-Verify the toolchain is reachable from the same shell Zed is launched from (Zed inherits its `PATH`):
-
-```bash
-cargo --version
-rustup target list --installed
-```
-
-`wasm32-wasip2` must appear in the installed-targets list.
+Rust must be installed through `rustup`; Zed handles the required WebAssembly target automatically when it builds the dev extension.
 
 ### 2. Clone the repository
 
@@ -67,7 +54,7 @@ git clone https://github.com/felixtensor/zed-mlir-suite.git
 
 In Zed, open the command palette (`Cmd+Shift+P` on macOS, `Ctrl+Shift+P` on Linux/Windows) and run **`zed: install dev extension`** — or open **Extensions** (`Cmd+Shift+X` / `Ctrl+Shift+X`) and click **Install Dev Extension**. Select the cloned directory.
 
-Zed builds the extension on install; the first build fetches dependencies and may take a minute or two. If the build fails with a missing-target error, re-run `rustup target add wasm32-wasip2` and reinstall.
+Zed builds the extension on install; the first build fetches dependencies and may take a minute or two. If the build fails, run **`zed: open log`** to inspect `Zed.log` for details.
 
 ## Language Server Setup
 

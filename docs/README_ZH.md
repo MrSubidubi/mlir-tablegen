@@ -42,20 +42,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 Windows 下从 [rustup.rs](https://rustup.rs) 下载并运行 `rustup-init.exe`。
 
-随后添加 Zed 扩展所使用的 WebAssembly 目标：
-
-```bash
-rustup target add wasm32-wasip2
-```
-
-确保在启动 Zed 的同一个 shell 中工具链可用（Zed 会继承其 `PATH`）：
-
-```bash
-cargo --version
-rustup target list --installed
-```
-
-已安装目标列表中需包含 `wasm32-wasip2`。
+Rust 必须通过 `rustup` 安装；Zed 构建开发扩展时会自动处理所需的 WebAssembly target，无需手动添加。
 
 ### 2. 克隆仓库
 
@@ -67,7 +54,7 @@ git clone https://github.com/felixtensor/zed-mlir-suite.git
 
 在 Zed 中打开命令面板（macOS 按 `Cmd+Shift+P`，Linux/Windows 按 `Ctrl+Shift+P`），执行 **`zed: install dev extension`** —— 或打开 **Extensions**（`Cmd+Shift+X` / `Ctrl+Shift+X`）并点击 **Install Dev Extension**，然后选择克隆的目录。
 
-Zed 会在安装时构建扩展；首次构建需要拉取依赖，可能耗时一两分钟。若构建因目标缺失而失败，请重新执行 `rustup target add wasm32-wasip2` 并重新安装。
+Zed 会在安装时构建扩展；首次构建需要拉取依赖，可能耗时一两分钟。若构建失败，请执行 **`zed: open log`**，在 `Zed.log` 中查看详细信息。
 
 ## Language Server 配置
 
