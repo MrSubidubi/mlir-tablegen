@@ -196,10 +196,10 @@ For MLIR tooling in other editors, see:
 
 ## Feedback & Contributions
 
-This extension is actively developed. See the [roadmap](docs/ROADMAP.md) for what's planned next. Contributions of all sizes are welcome — bug reports, feature requests, and pull requests:
+MLIR Suite is actively developed. See the [roadmap](docs/ROADMAP.md) for planned work and [CONTRIBUTING.md](CONTRIBUTING.md) for issue reporting, development, and validation guidance. Participation is governed by the [Code of Conduct](CODE_OF_CONDUCT.md).
 
-- [Open an issue](https://github.com/felixtensor/zed-mlir-suite/issues)
-- Submit a pull request with your improvements
+- Use the [issue chooser](https://github.com/felixtensor/zed-mlir-suite/issues/new/choose) to report a bug, request a feature, or ask a setup question.
+- Follow the [pull request guidance](CONTRIBUTING.md#pull-requests) when submitting a change.
 
 ## License
 

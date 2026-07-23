@@ -196,10 +196,10 @@ cmake --build . --target mlir-lsp-server mlir-pdll-lsp-server tblgen-lsp-server
 
 ## 反馈与贡献
 
-本扩展正在积极开发中。请参阅 [路线图](ROADMAP.md) 了解接下来的计划。欢迎各种形式的贡献 — 错误报告、功能请求和拉取请求：
+MLIR Suite 正在积极开发。请参阅 [路线图](ROADMAP.md) 了解计划中的工作，并阅读 [贡献指南](../CONTRIBUTING.md)（仅英文）了解 Issue 报告、开发与验证要求。参与本项目须遵守 [行为准则](../CODE_OF_CONDUCT.md)（仅英文）。
 
-- [提交 Issue](https://github.com/felixtensor/zed-mlir-suite/issues)
-- 提交 Pull Request 包含你的改进
+- 通过 [Issue 选择器](https://github.com/felixtensor/zed-mlir-suite/issues/new/choose) 报告错误、提出功能请求或咨询配置问题。
+- 提交改动时，请遵循 [拉取请求指南](../CONTRIBUTING.md#pull-requests)。
 
 ## 许可证
 
