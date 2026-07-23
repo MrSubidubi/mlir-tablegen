@@ -1,0 +1,104 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-issue-forms.json
+name: Feature request
+description: Propose an improvement to MLIR, TableGen, or PDLL support in Zed
+labels:
+  - Enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Describe the workflow or limitation first, then the behavior you would like MLIR Suite to provide. You do not need to resolve the ownership boundary between MLIR Suite, its parser dependencies, Zed, and LLVM before submitting the request.
+
+        Before submitting, search the [existing issues](https://github.com/felixtensor/zed-mlir-suite/issues) and [roadmap](https://github.com/felixtensor/zed-mlir-suite/blob/main/docs/ROADMAP.md) for the same request.
+
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing issues and the roadmap for the same request.
+          required: true
+        - label: If I included source, settings, screenshots, or other examples, I reviewed them and removed secrets, private paths, and proprietary content.
+          required: true
+
+  - type: dropdown
+    id: languages
+    attributes:
+      label: Affected language or context
+      description: Choose "Unsure" only when none of the other options applies.
+      multiple: true
+      options:
+        - MLIR
+        - TableGen
+        - PDLL
+        - C++ host or injected content
+        - Extension-wide or not language-specific
+        - Unsure
+    validations:
+      required: true
+
+  - type: dropdown
+    id: capabilities
+    attributes:
+      label: Requested capability
+      description: Select every relevant area. These choices do not automatically apply repository labels.
+      multiple: true
+      options:
+        - Tree-sitter parsing support
+        - Syntax highlighting or capture selection
+        - MLIR inside a C++ raw string
+        - C++ inside a PDLL code block
+        - C++ inside a TableGen code literal
+        - Language detection or editing configuration
+        - Auto-closing or bracket matching
+        - Indentation
+        - Symbol outline
+        - LSP executable discovery or configuration
+        - LLVM language-server navigation, capability, or editor integration
+        - Completion label styling
+        - MLIR Suite behavior in an SSH remote workspace
+        - Dev-extension installation, build, or packaging
+        - Documentation, tests, or CI
+        - Other or unsure
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or workflow
+      description: Explain what you are trying to do, what currently blocks or slows you down, and who would benefit.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+      description: Describe the desired result. Include an example when the request concerns syntax, highlighting, outlines, completion labels, or configuration.
+    validations:
+      required: true
+
+  - type: textarea
+    id: example
+    attributes:
+      label: Example source, configuration, or interaction
+      description: Add representative MLIR, TableGen, PDLL, C++, Zed settings, or step-by-step editor interaction when applicable.
+    validations:
+      required: false
+
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependency or ownership considerations
+      description: If known, explain whether the request may require a parser change, a Zed extension API, or new LLVM server behavior. It is acceptable to write that ownership is unknown.
+    validations:
+      required: false
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives and additional context
+      description: Describe current workarounds and add relevant screenshots, documentation, roadmap items, or related issues.
+    validations:
+      required: false

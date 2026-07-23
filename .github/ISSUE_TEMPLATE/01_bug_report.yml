@@ -1,0 +1,142 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-issue-forms.json
+name: Bug report
+description: Report a reproducible problem with MLIR Suite in Zed
+labels:
+  - Bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a problem. Use this form even if you are unsure whether the cause is MLIR Suite, a pinned Tree-sitter parser, Zed, or an LLVM language server. The maintainer will triage the responsible layer.
+
+        Before submitting, search the [existing issues](https://github.com/felixtensor/zed-mlir-suite/issues) for the same problem.
+
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched the existing issues and did not find the same problem.
+          required: true
+        - label: If I included examples, settings, or logs, I reviewed them and removed secrets, private paths, and proprietary source.
+          required: true
+
+  - type: dropdown
+    id: languages
+    attributes:
+      label: Affected language or context
+      description: Select every language or host context involved. Choose "Unsure" only when none of the other options applies. These choices help the maintainer apply the existing language labels.
+      multiple: true
+      options:
+        - MLIR
+        - TableGen
+        - PDLL
+        - C++ host or injected content
+        - Extension-wide or not language-specific
+        - Unsure
+    validations:
+      required: true
+
+  - type: dropdown
+    id: symptoms
+    attributes:
+      label: What appears to be affected?
+      description: Optionally select the observable areas that seem relevant. The maintainer will determine the responsible layer and apply root-cause labels.
+      multiple: true
+      options:
+        - Parsing or syntax highlighting
+        - Injected-language highlighting
+        - Language detection, comments, or word selection
+        - Auto-closing, bracket matching, or indentation
+        - Symbol outline
+        - Language-server discovery, startup, or configuration
+        - Diagnostics, navigation, hover, or completion
+        - Dev-extension installation or build
+        - Documentation, CI, or release metadata
+        - Other or unsure
+
+  - type: dropdown
+    id: execution
+    attributes:
+      label: Execution environment
+      options:
+        - Local workspace
+        - SSH remote workspace
+        - Both local and SSH remote
+        - Not applicable or unsure
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction steps
+      description: Explain how to reproduce the problem from opening the workspace or installing the dev extension.
+      placeholder: |
+        1. Open ...
+        2. Confirm Zed identifies the file as ...
+        3. Type or run ...
+        4. Observe ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Actual and expected behavior
+      placeholder: |
+        Actual: ...
+        Expected: ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproducer
+    attributes:
+      label: Source, configuration, and syntax evidence
+      description: For parser, highlighting, or injection problems, provide the smallest relevant source and include the displayed language mode, theme, standalone versus injected behavior, and a syntax-tree fragment with any `ERROR` or `MISSING` nodes if available. For setup or build problems, commands, configuration, logs, or a minimal repository layout can replace source. This field supports Markdown and file attachments.
+    validations:
+      required: false
+
+  - type: textarea
+    id: versions
+    attributes:
+      label: Environment and versions
+      description: >-
+        Required for runtime, installation, language, query, and LSP problems.
+        In Zed, run `zed: copy system specs into clipboard`. From the MLIR Suite
+        checkout, run `git rev-parse --short HEAD` to get the dev-extension
+        commit. For documentation, CI, or metadata-only reports, enter `N/A`
+        and identify the affected file or workflow.
+      placeholder: |
+        Zed: v...
+        MLIR Suite commit: ...
+        OS: ...
+        Architecture: ...
+        Installation: dev extension
+        Last known working version, if any: ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: lsp
+    attributes:
+      label: LLVM language-server details
+      description: For LSP problems, include the server name and version, installation or build source, executable actually used, discovery method, arguments, compilation database, include paths, whether the problem reproduces outside Zed, and which machine owns each path in SSH remote development.
+      placeholder: |
+        Server: mlir-lsp-server / mlir-pdll-lsp-server / tblgen-lsp-server
+        LLVM version or commit: ...
+        Executable and discovery: binary.path / settings.path / $PATH
+        binary.arguments: ...
+        Compilation database and extra_dirs: ...
+        Reproduces outside Zed: yes / no / not tested
+    validations:
+      required: false
+
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Relevant settings, logs, and related issues
+      description: Paste or attach only the relevant Zed settings and log lines. Include related Zed, LLVM, parser, or MLIR Suite links when they already exist. Review all content for sensitive information before posting.
+    validations:
+      required: false

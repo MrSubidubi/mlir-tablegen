@@ -1,0 +1,82 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-issue-forms.json
+name: Setup or usage question
+description: Ask for help configuring or understanding MLIR Suite
+labels:
+  - Question
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form for setup, configuration, and capability questions that are not yet a reproducible bug or a scoped feature request.
+
+        Check the [project documentation](https://github.com/felixtensor/zed-mlir-suite#readme) and [existing issues](https://github.com/felixtensor/zed-mlir-suite/issues) before submitting.
+
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: Before submitting
+      options:
+        - label: I checked the relevant project documentation and existing issues for an answer.
+          required: true
+        - label: If I included settings, logs, or source, I reviewed them and removed secrets, private paths, and proprietary content.
+          required: true
+
+  - type: dropdown
+    id: languages
+    attributes:
+      label: Affected language or context
+      description: Choose "Unsure or not applicable" only when none of the other options applies.
+      multiple: true
+      options:
+        - MLIR
+        - TableGen
+        - PDLL
+        - C++ host or injected content
+        - Extension-wide or not language-specific
+        - Unsure or not applicable
+    validations:
+      required: true
+
+  - type: dropdown
+    id: topic
+    attributes:
+      label: Topic
+      multiple: true
+      options:
+        - Dev-extension installation or build
+        - MLIR, TableGen, or PDLL language behavior
+        - Syntax highlighting or capture selection
+        - Tree-sitter parsing
+        - LLVM language-server installation or discovery
+        - Compilation database or extra include directories
+        - Zed settings
+        - MLIR Suite behavior in an SSH remote workspace
+        - Supported versus upstream-dependent capability
+        - Contribution or development setup
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Question
+      description: State the outcome you want and the part that is unclear.
+    validations:
+      required: true
+
+  - type: textarea
+    id: attempted
+    attributes:
+      label: Relevant context or what you have tried
+      description: Include relevant commands, documentation sections, settings, and observed output when applicable.
+    validations:
+      required: false
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Relevant environment details
+      description: Include Zed, MLIR Suite, LLVM, OS, local or SSH remote, and language information when it affects the question.
+    validations:
+      required: false
