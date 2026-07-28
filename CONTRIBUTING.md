@@ -47,14 +47,14 @@ procedures in the [maintainer guide](docs/MAINTAINERS.md).
 Install Rust through [rustup](https://rustup.rs) and add the WebAssembly target
 used by Zed extensions:
 
-```sh
+```bash
 rustup target add wasm32-wasip2
 ```
 
 Run the same Rust checks as CI for source, query, configuration, dependency, and
 release changes:
 
-```sh
+```bash
 cargo fmt -- --check
 cargo test --lib
 cargo clippy --target wasm32-wasip2 -- -D warnings
