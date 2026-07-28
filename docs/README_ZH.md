@@ -8,7 +8,7 @@
 [![License](https://img.shields.io/badge/license-Apache%202.0%20with%20LLVM%20Exceptions-blue?style=flat-square&logo=apache&logoColor=white)](../LICENSE)
 [![Stars](https://img.shields.io/github/stars/felixtensor/zed-mlir-suite?style=flat-square&logo=github)](https://github.com/felixtensor/zed-mlir-suite/stargazers)
 
-为 [Zed](https://zed.dev) 编辑器提供 [MLIR](https://mlir.llvm.org)、TableGen 和 PDLL 支持。
+为 [Zed](https://zed.dev) 编辑器提供 [MLIR](https://mlir.llvm.org)、[TableGen](https://llvm.org/docs/TableGen/) 和 [PDLL](https://mlir.llvm.org/docs/PDLL/) 支持。
 
 ## 功能特性
 
@@ -26,13 +26,13 @@
 ## 前置条件
 
 - [Zed](https://zed.dev) 编辑器
-- （可选）LLVM Language Server 用于 LSP 功能 — 详见 [Language Server 配置](#language-server-配置)。
+- （可选）LLVM Language Server 用于 LSP 功能 — 详见 [语言支持](#语言支持)。
 
 ## 安装
 
 本扩展以 Zed **开发扩展（dev extension）** 方式安装：克隆仓库后将目录交给 Zed，Zed 会在首次安装时将扩展编译为 WebAssembly，因此本地需要可用的 Rust 工具链。
 
-### 1. 安装 Rust 工具链
+### 安装 Rust 工具链
 
 通过 [rustup](https://rustup.rs) 安装 Rust（stable）。macOS / Linux：
 
@@ -44,104 +44,39 @@ Windows 下从 [rustup.rs](https://rustup.rs) 下载并运行 `rustup-init.exe`�
 
 Rust 必须通过 `rustup` 安装；Zed 构建开发扩展时会自动处理所需的 WebAssembly target，无需手动添加。
 
-### 2. 克隆仓库
+### 克隆仓库
 
 ```bash
 git clone https://github.com/felixtensor/zed-mlir-suite.git
 ```
 
-### 3. 作为开发扩展安装
+### 作为开发扩展安装
 
 在 Zed 中打开命令面板（macOS 按 `Cmd+Shift+P`，Linux/Windows 按 `Ctrl+Shift+P`），执行 **`zed: install dev extension`** —— 或打开 **Extensions**（`Cmd+Shift+X` / `Ctrl+Shift+X`）并点击 **Install Dev Extension**，然后选择克隆的目录。
 
 Zed 会在安装时构建扩展；首次构建需要拉取依赖，可能耗时一两分钟。若构建失败，请执行 **`zed: open log`**，在 `Zed.log` 中查看详细信息。
 
-## Language Server 配置
+## 语言支持
 
-### 编译服务器
+### 基础编辑功能
 
-三个 Language Server 位于 `llvm-project` 单体仓库的 `mlir/tools/` 目录下。按照 [MLIR 官方入门指南](https://mlir.llvm.org/getting_started/) 编译即可，典型的 Unix 编译流程如下：
-
-```bash
-git clone https://github.com/llvm/llvm-project.git
-mkdir llvm-project/build && cd llvm-project/build
-
-cmake -G Ninja ../llvm \
-  -DLLVM_ENABLE_PROJECTS=mlir \
-  -DLLVM_TARGETS_TO_BUILD="Native" \
-  -DCMAKE_BUILD_TYPE=Release \
-  -DLLVM_ENABLE_ASSERTIONS=ON
-
-cmake --build . --target mlir-lsp-server mlir-pdll-lsp-server tblgen-lsp-server
-```
-
-编译成功后，二进制文件位于 `llvm-project/build/bin/`。将该目录加入 `$PATH`，或通过 `settings.json` 为每个服务器指定绝对路径（见下文）。
-
-> 提示：如果在 `LLVM_ENABLE_PROJECTS` 中列出了 `mlir` 并编译默认的 `all` 目标，三个 LSP 服务器会随 MLIR 一起生成，无需单独构建。
-
-### 配置
-
-每个服务器在 Zed 的 `settings.json` 中通过 `lsp.<server-id>.settings` 进行配置。扩展会通过 `settings.path` 查找服务器二进制文件，若未设置则回退到 `$PATH`。
-
-| 语言 | Server ID |
-|---|---|
-| MLIR | `mlir-lsp-server` |
-| PDLL | `mlir-pdll-lsp-server` |
-| TableGen | `tblgen-lsp-server` |
-
-#### 可用配置项
-
-| 字段 | 类型 | 适用 | 说明 |
-|---|---|---|---|
-| `path` | `string` | 全部 | 服务器二进制文件路径 |
-| `compilation_database` | `string` | tblgen, pdll | 编译数据库 YAML 文件路径 |
-| `extra_dirs` | `string[]` | tblgen, pdll | 额外 include 目录 |
-| `log` | `string` | 全部 | 日志级别：`"error"`、`"info"` 或 `"verbose"` |
-| `pretty` | `bool` | 全部 | 美化 JSON 输出 |
-
-所有字段均为可选。扩展会自动检测工作区中的编译数据库文件；如果检测成功，无需手动配置。
-
-#### SSH 远程开发
-
-使用 Zed SSH 远程开发时，Language Server 运行在远端服务器上。MLIR Suite 的服务器二进制路径应通过 `zed: open server settings` 配置，而不是 `zed: open settings file`；后者打开的是本机 Zed 配置。详见 [SSH remote development](REMOTE_DEVELOPMENT.md)（仅英文）。
-
-#### 示例
+无需安装 LLVM 二进制文件。若只需 Tree-sitter 高亮、符号大纲、括号匹配和缩进，可在用户配置或项目 `.zed/settings.json` 中禁用 Language Server：
 
 ```jsonc
 {
-  "lsp": {
-    "mlir-lsp-server": {
-      "settings": {
-        "path": "/path/to/mlir-lsp-server",
-        "log": "verbose"
-      }
-    },
-    "tblgen-lsp-server": {
-      "settings": {
-        "path": "/path/to/tblgen-lsp-server",
-        "compilation_database": "/path/to/build/tablegen_compile_commands.yml",
-        "extra_dirs": [
-          "/path/to/llvm-project/llvm/include",
-          "/path/to/llvm-project/mlir/include"
-        ]
-      }
-    },
-    "mlir-pdll-lsp-server": {
-      "settings": {
-        "path": "/path/to/mlir-pdll-lsp-server",
-        "compilation_database": "/path/to/build/pdll_compile_commands.yml",
-        "extra_dirs": [
-          "/path/to/llvm-project/mlir/include"
-        ]
-      }
-    }
+  "languages": {
+    "MLIR": { "enable_language_server": false },
+    "PDLL": { "enable_language_server": false },
+    "TableGen": { "enable_language_server": false }
   }
 }
 ```
 
-> Zed 原生的 `binary.path` 和 `binary.arguments` 字段仍然有效，设置后会优先使用。
+详细说明见 [Language Server Setup](LANGUAGE_SERVER.md#disable-lsp)（仅英文）。
 
-修改配置后，打开命令面板（macOS 按 `Cmd+Shift+P`，Linux/Windows 按 `Ctrl+Shift+P`）并执行 `zed: restart language server` 以应用更改。
+### LSP 代码智能
+
+安装 `mlir-lsp-server`、`mlir-pdll-lsp-server` 和 `tblgen-lsp-server` 后，可使用各服务器为对应语言提供的 LSP 功能。建议在 Zed 中配置各服务器的二进制文件路径；也可以选择将其所在目录加入当前 worktree 的 `$PATH`。能力矩阵、构建方法、配置项及 SSH 远程开发说明见 [Language Server Setup](LANGUAGE_SERVER.md#configure-lsp)（仅英文）。
 
 ## 截图
 
@@ -196,7 +131,7 @@ cmake --build . --target mlir-lsp-server mlir-pdll-lsp-server tblgen-lsp-server
 
 ## 反馈与贡献
 
-MLIR Suite 正在积极开发。请参阅 [路线图](ROADMAP.md) 了解计划中的工作，并阅读 [贡献指南](../CONTRIBUTING.md)（仅英文）了解 Issue 报告、开发与验证要求。参与本项目须遵守 [行为准则](../CODE_OF_CONDUCT.md)（仅英文）。
+开发方向和优先级记录在 [路线图](ROADMAP.md) 中。[贡献指南](../CONTRIBUTING.md)（仅英文）说明了 Issue 报告、开发与验证要求。参与本项目须遵守 [行为准则](../CODE_OF_CONDUCT.md)（仅英文）。
 
 - 通过 [Issue 选择器](https://github.com/felixtensor/zed-mlir-suite/issues/new/choose) 报告错误、提出功能请求或咨询配置问题。
 - 提交改动时，请遵循 [拉取请求指南](../CONTRIBUTING.md#pull-requests)。
