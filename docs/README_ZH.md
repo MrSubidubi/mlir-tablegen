@@ -25,7 +25,7 @@
 
 ## 前置条件
 
-- [Zed](https://zed.dev) 编辑器
+- [Zed](https://zed.dev/download) 编辑器
 - （可选）LLVM Language Server 用于 LSP 功能 — 详见 [语言支持](#语言支持)。
 
 ## 安装

@@ -25,7 +25,7 @@
 
 ## Prerequisites
 
-- [Zed](https://zed.dev) editor
+- [Zed](https://zed.dev/download) editor
 - (Optional) LLVM language servers for LSP features — see [Language Support](#language-support).
 
 ## Installation
