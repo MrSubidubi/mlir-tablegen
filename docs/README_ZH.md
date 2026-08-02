@@ -12,7 +12,7 @@
 
 ## 功能特性
 
-- **MLIR、TableGen 和 PDLL 的 Tree-sitter grammar** — 固定使用的 MLIR parser 在解析 [corpus 中的 566 个官方 MLIR 测试文件](https://github.com/felixtensor/tree-sitter-mlir/blob/2d5e709cd733123b5878325cc3c2b29a972e0b1f/examples/README.md)时不会产生 `ERROR` 节点，这些文件覆盖 24 个 dialect 目录；MLIR Suite 的 Zed queries 基于这些语法树提供高亮。
+- **MLIR、TableGen 和 PDLL 的 Tree-sitter grammar** — 固定使用的 MLIR parser 在解析 [corpus 中的 600 个官方 MLIR 测试文件](https://github.com/felixtensor/tree-sitter-mlir/blob/06a0f9237dd3166e2021090e6d30ca08fb13c8e3/examples/README.md)时不会产生 `ERROR` 节点，这些文件覆盖 24 个 dialect 目录；MLIR Suite 的 Zed queries 基于这些语法树提供高亮。
 - **C++ raw string 内嵌 MLIR 高亮** — 当 Zed 内置的 C++ grammar 按分隔符注入 `raw_string_content` 时，`R"mlir(…)mlir"` 字符串中的 MLIR 会使用本扩展的 MLIR grammar 高亮。
 - **一流的自定义 dialect 支持** — 用户自定义或外部 `dialect.op` 形式均可正确识别和高亮，你的项目自有 dialect 开箱即用。
 - **符号大纲** — 在大纲面板中导航 MLIR、TableGen 和 PDLL 符号。

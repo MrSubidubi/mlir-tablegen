@@ -12,7 +12,7 @@
 
 ## Features
 
-- **Tree-sitter grammars** for MLIR (`.mlir`), TableGen (`.td`), and PDLL (`.pdll`) — the pinned MLIR parser parses a [corpus of 566 official MLIR test files across 24 dialect directories](https://github.com/felixtensor/tree-sitter-mlir/blob/2d5e709cd733123b5878325cc3c2b29a972e0b1f/examples/README.md) without `ERROR` nodes; MLIR Suite's Zed queries provide highlighting on top of those syntax trees.
+- **Tree-sitter grammars** for MLIR (`.mlir`), TableGen (`.td`), and PDLL (`.pdll`) — the pinned MLIR parser parses a [corpus of 600 official MLIR test files across 24 dialect directories](https://github.com/felixtensor/tree-sitter-mlir/blob/06a0f9237dd3166e2021090e6d30ca08fb13c8e3/examples/README.md) without `ERROR` nodes; MLIR Suite's Zed queries provide highlighting on top of those syntax trees.
 - **MLIR inside C++ raw strings** — when Zed's bundled C++ grammar injects `raw_string_content` by delimiter, MLIR inside `R"mlir(…)mlir"` strings is highlighted using this extension's MLIR grammar.
 - **First-class custom dialect support** — user-defined or out-of-tree `dialect.op` forms are recognized and highlighted correctly, so your project's own dialects just work.
 - **Symbol outline** — navigate symbols in MLIR, TableGen, and PDLL from the outline panel.
