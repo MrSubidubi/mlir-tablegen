@@ -43,9 +43,9 @@
 (attr_expr "attr" @keyword)
 (type_expr "type" @keyword)
 
-;; Identifier defaults — keep this BEFORE the specific identifier rules below.
-;; Zed's tree-sitter highlighter uses last-match-wins: any later capture for
-;; the same identifier node overrides this fallback.
+;; Identifier fallback — keep BEFORE the specific identifier rules below.
+;; Zed's tree-sitter highlighter uses last-match-wins: later captures for the
+;; same identifier node override this fallback.
 (identifier) @variable
 (variable_def (identifier) @variable)
 (call_expr (identifier) @function)
@@ -85,18 +85,18 @@
 [
   "("
   ")"
-  "{"
-  "}"
   "["
   "]"
+  "{"
+  "}"
   "<"
   ">"
 ] @punctuation.bracket
 
 ;; Delimiters
 [
-  ":"
   ","
+  ":"
   ";"
 ] @punctuation.delimiter
 

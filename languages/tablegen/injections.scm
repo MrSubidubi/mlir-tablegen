@@ -1,6 +1,9 @@
-;; Inject tree-sitter-cpp into TableGen code blocks — but ONLY when the
-;; enclosing field is unambiguously C++ code, not arbitrary text.
-;; Editors should provide tree-sitter-cpp as a sibling parser.
+;; ---------------------------------------------------------------------------
+;; TableGen language injections
+;;
+;; TableGen `[{ ... }]` code blocks are injected as C++ — but ONLY when the
+;; enclosing field is unambiguously C++ source, not arbitrary text. Editors
+;; should provide tree-sitter-cpp as a sibling parser.
 ;;
 ;; Per the LLVM TableGen ProgRef, `code` is an alias for `string`; on the
 ;; parser side they produce indistinguishable values. The two cases below
@@ -10,6 +13,7 @@
 ;;            gate on a known C++-carrying ODS field name.
 ;; Counter-example deliberately NOT injected: `string assemblyFormat = "..."`
 ;; is the op assembly DSL, not C++.
+;; ---------------------------------------------------------------------------
 
 ;; Case 1: field declared with `code` type — always C++.
 ;;   code extraClassDeclaration = [{ ... }];
@@ -26,7 +30,8 @@
 (field_declaration
   (identifier) @_name
   (code_literal (code_chunk) @injection.content)
-  (#match? @_name "^(extraClassDeclaration|extraClassDefinition|extraTraitClassDeclaration|extraSharedClassDeclaration|builders|verify)$")
+  (#match? @_name
+    "^(extraClassDeclaration|extraClassDefinition|extraTraitClassDeclaration|extraSharedClassDeclaration|builders|verify)$")
   (#set! injection.language "cpp")
   (#set! injection.combined))
 
@@ -35,7 +40,8 @@
 (let_assignment
   (identifier) @_name
   (code_literal (code_chunk) @injection.content)
-  (#match? @_name "^(extraClassDeclaration|extraClassDefinition|extraTraitClassDeclaration|extraSharedClassDeclaration|builders|verify)$")
+  (#match? @_name
+    "^(extraClassDeclaration|extraClassDefinition|extraTraitClassDeclaration|extraSharedClassDeclaration|builders|verify)$")
   (#set! injection.language "cpp")
   (#set! injection.combined))
 
@@ -45,6 +51,7 @@
 (let_item
   (identifier) @_name
   (code_literal (code_chunk) @injection.content)
-  (#match? @_name "^(extraClassDeclaration|extraClassDefinition|extraTraitClassDeclaration|extraSharedClassDeclaration|builders|verify)$")
+  (#match? @_name
+    "^(extraClassDeclaration|extraClassDefinition|extraTraitClassDeclaration|extraSharedClassDeclaration|builders|verify)$")
   (#set! injection.language "cpp")
   (#set! injection.combined))

@@ -1,17 +1,17 @@
 ;; ---------------------------------------------------------------------------
-;; Dialect-agnostic MLIR syntax highlighting
+;; MLIR syntax highlighting (dialect-agnostic)
 ;;
-;; Zed's tree-sitter highlighter uses last-match-wins: when multiple rules
-;; overlap, the one that appears *later* in the file wins. The
+;; Zed's tree-sitter highlighter uses last-match-wins: when two rules overlap,
+;; the one that appears later in the file wins. The
 ;; `(custom_operation (bare_id) @keyword)` fallback near the end must therefore
-;; come *before* any more specific `bare_id` captures (e.g. inside `attribute_entry` or
-;; `dense_resource_literal`) so those later rules override it.
+;; come BEFORE the more specific `bare_id` captures (inside `attribute_entry`
+;; and `dense_resource_literal`) that need to override it.
 ;; ---------------------------------------------------------------------------
 
 ;; Comments
 (comment) @comment
 
-;; Keywords and Operation names
+;; Keywords and operation names
 (func_operation name: _ @function)
 (func_operation visibility: _ @keyword)
 (func_operation specifier: (function_specifier) @keyword)
@@ -34,7 +34,7 @@
 ;; Types
 (builtin_type) @type.builtin
 
-;; Two-tone highlighting inside composite types (tensor, memref, vector):
+;; Two-tone highlighting inside composite types (tensor, memref, vector).
 (dimension_size) @number
 
 ;; Element types inside dim_list / vector_dim_list are named nodes — their
@@ -47,7 +47,7 @@
   (token_type)
 ] @type.builtin
 
-;; Composite types not always reachable through (builtin_type)
+;; Composite types not always reachable through (builtin_type).
 [
   (complex_type)
   (memref_type)
@@ -59,7 +59,7 @@
 
 ;; 'x' separator inside dimension lists — render as delimiter rather than
 ;; inheriting @type.builtin from the (memref_type)/(tensor_type)/(vector_type)
-;; block above. Must appear after that block under last-match-wins.
+;; block above. Must appear AFTER that block under last-match-wins.
 ;; @cap binds to the "x" literal (parent-internal anonymous token); placing
 ;; it outside an alternation would capture the parent node instead.
 (dim_list "x" @punctuation.delimiter)
@@ -71,11 +71,11 @@
 
 [
   (type_alias)
-  (dialect_type)
   (type_alias_def)
+  (dialect_type)
 ] @type
 
-;; Numeric and Bool literals
+;; Numeric and boolean literals
 [
   (integer_literal)
   (float_literal)
@@ -107,9 +107,8 @@
   (attribute_alias_def)
   (builtin_attribute)
   (dialect_attribute)
+  (dictionary_attribute)
 ] @attribute
-
-(dictionary_attribute) @attribute
 
 ;; Builtin attribute and affine keywords
 (affine_map "affine_map" @constant.builtin)
@@ -132,7 +131,13 @@
 (strided_layout ["?" "*"] @punctuation.special)
 (distinct_attribute "distinct" @keyword)
 (dense_resource_literal "dense_resource" @constant.builtin)
-["ceildiv" "floordiv" "mod"] @operator
+
+[
+  "ceildiv"
+  "floordiv"
+  "mod"
+] @operator
+
 (pretty_dialect_item_body
   ["array" "dense" "opaque" "sparse" "tensor" "vector"] @keyword)
 (pretty_dialect_item_body (bare_id) @keyword)
@@ -150,18 +155,21 @@
 (generic_operation (string_literal) @function)
 (escape_sequence) @string.escape
 
-;; Symbols (@name) — all symbol references share one capture
+;; Symbols (@name) — all symbol references share one capture.
 (symbol_ref_id) @string.special.symbol
 
-;; SSA values — @variable.special gives a distinct color
-[(value_use) (op_result)] @variable.special
+;; SSA values — @variable.special gives a distinct color.
+[
+  (value_use)
+  (op_result)
+] @variable.special
 
 ;; Fallback keyword for ad-hoc custom operation body tokens like `to`, `step`,
 ;; `ins`, and `outs`. Keep this scoped so attribute keys, affine dimensions,
 ;; and pretty dialect payload identifiers do not all become keywords.
 (custom_operation (bare_id) @keyword)
 
-;; Handle name inside dense_resource<...> — must come after the bare_id
+;; Handle name inside dense_resource<...> — must come AFTER the bare_id
 ;; catch-all so it wins under last-match-wins.
 (dense_resource_literal (bare_id) @constant.builtin)
 
@@ -176,18 +184,18 @@
 [
   "("
   ")"
-  "{"
-  "}"
   "["
   "]"
+  "{"
+  "}"
   "<"
   ">"
 ] @punctuation.bracket
 
 ;; Delimiters
 [
-  ":"
   ","
+  ":"
 ] @punctuation.delimiter
 
 ;; Variadic / dynamic markers

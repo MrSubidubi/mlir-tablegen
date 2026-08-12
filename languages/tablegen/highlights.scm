@@ -1,15 +1,28 @@
+;; ---------------------------------------------------------------------------
+;; TableGen syntax highlighting
+;;
+;; Zed's tree-sitter highlighter uses last-match-wins: when two rules overlap,
+;; the one that appears later in the file wins. The `(identifier) @variable`
+;; fallback and the UPPER_CASE heuristic are therefore placed BEFORE every
+;; context-specific identifier rule that needs to override them.
+;; ---------------------------------------------------------------------------
+
 ;; Comments
 (line_comment) @comment
 (block_comment) @comment
 
 ;; Preprocessor
-"#define"  @preproc
-"#ifdef"   @preproc
-"#ifndef"  @preproc
-"#else"    @preproc
-"#endif"   @preproc
+[
+  "#define"
+  "#ifdef"
+  "#ifndef"
+  "#else"
+  "#endif"
+] @preproc
+
 (macro_name) @constant
 
+;; Include directive
 "include" @keyword
 
 ;; Keywords
@@ -116,14 +129,24 @@
   "..."
 ] @operator
 
-;; Punctuation
-[ "{" "}" "[" "]" "(" ")" "<" ">" ] @punctuation.bracket
-
+;; Brackets
 [
-  "."
+  "("
+  ")"
+  "["
+  "]"
+  "{"
+  "}"
+  "<"
+  ">"
+] @punctuation.bracket
+
+;; Delimiters
+[
   ","
-  ";"
   ":"
+  ";"
+  "."
 ] @punctuation.delimiter
 
 ;; Literals
@@ -134,26 +157,39 @@
 (boolean_literal) @boolean
 (unset_value) @constant.builtin
 
-;; ─── MLIR dialect-flavor predicates ─────────────────────────────────────────
-;; (Per spec §2.1: dialect identification is queries-side, not grammar-side.)
+;; ---------------------------------------------------------------------------
+;; MLIR dialect-flavor predicates
+;;
+;; Dialect identification lives in the queries rather than the grammar, so the
+;; TableGen parser stays dialect-agnostic and these ODS heuristics can change
+;; without a parser release. The alternation strings below cannot be wrapped
+;; and are the one place this file exceeds 80 columns.
+;; ---------------------------------------------------------------------------
 
 ;; Common MLIR ODS base classes
 (parent_class (identifier) @type.builtin
-  (#match? @type.builtin "^(Op|Pattern|Pat|Intrinsic|Attr|AttrDef|TypeDef|Dialect|Interface|OpInterface|AttrInterface|TypeInterface|Constraint|Pred|Property)$"))
+  (#match? @type.builtin
+    "^(Op|Pattern|Pat|Intrinsic|Attr|AttrDef|TypeDef|Dialect|Interface|OpInterface|AttrInterface|TypeInterface|Constraint|Pred|Property)$"))
 
 ;; ODS def names that follow the "Op" / "Type" / "Attr" suffix convention
 (def_definition (object_name (identifier) @type)
-  (#match? @type "Op$|Type$|Attr$"))
+  (#match? @type
+    "Op$|Type$|Attr$"))
 
 ;; Common ODS field names — Op / TypeDef / AttrDef / Dialect surface.
 ;; Split by rough category to keep the predicates readable.
 (field_declaration (type) . (identifier) @property
-  (#match? @property "^(arguments|results|regions|successors|parameters|traits|builders)$"))
+  (#match? @property
+    "^(arguments|results|regions|successors|parameters|traits|builders)$"))
 (field_declaration (type) . (identifier) @property
-  (#match? @property "^(summary|description|opName|mnemonic|cppNamespace|cppClassName|dependentDialects)$"))
+  (#match? @property
+    "^(summary|description|opName|mnemonic|cppNamespace|cppClassName|dependentDialects)$"))
 (field_declaration (type) . (identifier) @property
-  (#match? @property "^(assemblyFormat|extraClassDeclaration|extraClassDefinition)$"))
+  (#match? @property
+    "^(assemblyFormat|extraClassDeclaration|extraClassDefinition)$"))
 (field_declaration (type) . (identifier) @property
-  (#match? @property "^(hasCustomAssemblyFormat|skipDefaultBuilders|hasVerifier|hasRegionVerifier|hasCanonicalizer|hasCanonicalizeMethod|hasFolder|hasOperandAccessFunctions)$"))
+  (#match? @property
+    "^(hasCustomAssemblyFormat|skipDefaultBuilders|hasVerifier|hasRegionVerifier|hasCanonicalizer|hasCanonicalizeMethod|hasFolder|hasOperandAccessFunctions)$"))
 (field_declaration (type) . (identifier) @property
-  (#match? @property "^(useCustomTypePrinterParser|useDefaultAttributePrinterParser|useDefaultTypePrinterParser)$"))
+  (#match? @property
+    "^(useCustomTypePrinterParser|useDefaultAttributePrinterParser|useDefaultTypePrinterParser)$"))

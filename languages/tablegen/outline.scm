@@ -1,5 +1,6 @@
 ;; ---------------------------------------------------------------------------
 ;; TableGen outline (symbol navigation)
+;;
 ;; Anonymous, unset, and empty record names are skipped because they do not
 ;; have a readable label to surface in Zed's outline. Computed names keep their
 ;; source expression as a stable navigation label.

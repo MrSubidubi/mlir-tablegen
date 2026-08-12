@@ -1,5 +1,6 @@
 ;; ---------------------------------------------------------------------------
 ;; PDLL outline (symbol navigation)
+;;
 ;; The LLVM PDLL parser distinguishes top-level declarations from inline
 ;; Constraint / Rewrite declarations, which are local lambda-like helpers.
 ;; Only named top-level declarations are surfaced here; anonymous Patterns and
