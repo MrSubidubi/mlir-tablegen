@@ -1,141 +1,212 @@
-# zed-mlir-suite
+# Zed MLIR
 
-[![EN](https://img.shields.io/badge/lang-EN-blue?style=flat-square)](README.md)
-[![中文](https://img.shields.io/badge/lang-中文-lightgrey?style=flat-square)](docs/README_ZH.md)
+[MLIR](https://mlir.llvm.org) (`.mlir`), [TableGen](https://llvm.org/docs/TableGen/)
+(`.td`), and [PDLL](https://mlir.llvm.org/docs/PDLL/) (`.pdll`) support for the
+[Zed](https://zed.dev) editor.
 
-[![CI](https://img.shields.io/github/actions/workflow/status/felixtensor/zed-mlir-suite/ci.yml?style=flat-square&logo=githubactions&logoColor=white&label=CI)](https://github.com/felixtensor/zed-mlir-suite/actions/workflows/ci.yml)
-[![Version](https://img.shields.io/github/v/tag/felixtensor/zed-mlir-suite?style=flat-square&logo=github&label=version)](https://github.com/felixtensor/zed-mlir-suite/tags)
-[![License](https://img.shields.io/badge/license-Apache%202.0%20with%20LLVM%20Exceptions-blue?style=flat-square&logo=apache&logoColor=white)](LICENSE)
-[![Stars](https://img.shields.io/github/stars/felixtensor/zed-mlir-suite?style=flat-square&logo=github)](https://github.com/felixtensor/zed-mlir-suite/stargazers)
+## Development
 
-[MLIR](https://mlir.llvm.org), [TableGen](https://llvm.org/docs/TableGen/), and [PDLL](https://mlir.llvm.org/docs/PDLL/) support for the [Zed](https://zed.dev) editor.
+To develop this extension, see the [Developing Extensions](https://zed.dev/docs/extensions/developing-extensions) section of the Zed docs.
 
-## Features
+## Highlighting
 
-- **Tree-sitter grammars** for MLIR (`.mlir`), TableGen (`.td`), and PDLL (`.pdll`) — the pinned MLIR parser parses a [corpus of 600 official MLIR test files across 24 dialect directories](https://github.com/felixtensor/tree-sitter-mlir/blob/06a0f9237dd3166e2021090e6d30ca08fb13c8e3/examples/README.md) without `ERROR` nodes; MLIR Suite's Zed queries provide highlighting on top of those syntax trees.
-- **MLIR inside C++ raw strings** — when Zed's bundled C++ grammar injects `raw_string_content` by delimiter, MLIR inside `R"mlir(…)mlir"` strings is highlighted using this extension's MLIR grammar.
-- **First-class custom dialect support** — user-defined or out-of-tree `dialect.op` forms are recognized and highlighted correctly, so your project's own dialects just work.
-- **Symbol outline** — navigate symbols in MLIR, TableGen, and PDLL from the outline panel.
-- **Language Server integration** for all three upstream LLVM servers:
-  - `mlir-lsp-server` for `.mlir`
-  - `mlir-pdll-lsp-server` for `.pdll`
-  - `tblgen-lsp-server` for `.td`
-- **Rich completion labels** — completion items from the MLIR and PDLL language servers are classified by their LSP kind and detail, so values, blocks, dialects, operations, types, attributes, constraints, and include paths are colored consistently.
-- **Editing ergonomics** — bracket matching, auto-close pairs, and indentation tuned for each language.
+Custom and out-of-tree dialects need no configuration: any `dialect.op` form is
+recognized, so a project's own dialects behave like upstream ones. MLIR embedded
+in C++ raw strings is highlighted as MLIR wherever Zed's bundled C++ grammar
+injects `raw_string_content` by delimiter, as in `R"mlir(…)mlir"`.
 
-## Prerequisites
+## Language Servers
 
-- [Zed](https://zed.dev/download) editor
-- (Optional) LLVM language servers for LSP features — see [Language Support](#language-support).
+The extension integrates the three language servers from the LLVM project:
+`mlir-lsp-server` for `.mlir`, `mlir-pdll-lsp-server` for `.pdll`, and
+`tblgen-lsp-server` for `.td`. They are optional — Tree-sitter highlighting,
+symbol outlines, bracket matching, and indentation work without them.
 
-## Installation
+Completion items from the MLIR and PDLL servers are classified by their LSP kind
+and detail, so values, blocks, dialects, operations, types, attributes,
+constraints, and include paths are colored consistently.
 
-This extension is installed as a Zed **dev extension**: clone the repository, then point Zed at the directory. Zed compiles the extension to WebAssembly on first install, so a local Rust toolchain is required.
+### Server Capabilities
 
-### Install the Rust toolchain
+The available LSP features depend on the server and LLVM version. The following
+matrix reflects
+[`llvm/llvm-project@06bf4bfff830`](https://github.com/llvm/llvm-project/commit/06bf4bfff830).
+This extension does not pin or bundle LLVM, so capabilities may differ in other
+LLVM builds.
 
-Install Rust via [rustup](https://rustup.rs) (stable). On macOS / Linux:
+| LSP capability | MLIR | PDLL | TableGen |
+|---|:---:|:---:|:---:|
+| Completion | ✅ | ✅ | ➖ |
+| Diagnostics | ✅ | ✅ | ✅ |
+| Signature help | ➖ | ✅ | ➖ |
+| Definition | ✅ | ✅ | ✅ |
+| References | ✅ | ✅ | ✅ |
+| Document links | ➖ | ✅ | ✅ |
+| Hover | ✅ | ✅ | ✅ |
+| Document symbols | ⚠️ | ✅ | ➖ |
+| Inlay hints | ➖ | ✅ | ➖ |
+| Code actions | ✅ | ➖ | ➖ |
+| Semantic tokens | ➖ | ➖ | ➖ |
+| Formatting | ➖ | ➖ | ➖ |
 
-```bash
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-```
+*Key: ✅ Supported · ⚠️ Conditional · ➖ Not supported.*
 
-On Windows, download and run `rustup-init.exe` from [rustup.rs](https://rustup.rs).
+Diagnostics use the standard `textDocument/publishDiagnostics` notification,
+which is not advertised in the initialization capability object. MLIR document
+symbols require the client to advertise hierarchical document symbols.
 
-Rust must be installed through `rustup`; Zed handles the required WebAssembly target automatically when it builds the dev extension.
+### Disable the Servers
 
-### Clone the repository
-
-```bash
-git clone https://github.com/felixtensor/zed-mlir-suite.git
-```
-
-### Install as a dev extension
-
-In Zed, open the command palette (`Cmd+Shift+P` on macOS, `Ctrl+Shift+P` on Linux/Windows) and run **`zed: install dev extension`** — or open **Extensions** (`Cmd+Shift+X` / `Ctrl+Shift+X`) and click **Install Dev Extension**. Select the cloned directory.
-
-Zed builds the extension on install; the first build fetches dependencies and may take a minute or two. If the build fails, run **`zed: open log`** to inspect `Zed.log` for details.
-
-## Language Support
-
-### Core editing
-
-No LLVM binaries are required. To keep Tree-sitter highlighting, symbol outlines, bracket matching, and indentation without LSP features, disable language servers in your user settings or project `.zed/settings.json`:
+If the LLVM language servers are not installed, disable LSP for these languages
+to prevent Zed from trying to initialize them:
 
 ```jsonc
 {
   "languages": {
-    "MLIR": { "enable_language_server": false },
-    "PDLL": { "enable_language_server": false },
-    "TableGen": { "enable_language_server": false }
+    "MLIR": {
+      "enable_language_server": false
+    },
+    "PDLL": {
+      "enable_language_server": false
+    },
+    "TableGen": {
+      "enable_language_server": false
+    }
   }
 }
 ```
 
-See [Language Server Setup](docs/LANGUAGE_SERVER.md#disable-lsp) for details.
+Add this to your user `settings.json` or a project's `.zed/settings.json`. See
+Zed's documentation for
+[enabling or disabling language servers](https://zed.dev/docs/configuring-languages#enabling-or-disabling-language-servers).
 
-### LSP code intelligence
+### Build the Servers
 
-Install `mlir-lsp-server`, `mlir-pdll-lsp-server`, and `tblgen-lsp-server` to enable the LSP features supported by each language. Configure each server's binary path in Zed; alternatively, make the containing directory available on the worktree's `$PATH`. See [Language Server Setup](docs/LANGUAGE_SERVER.md#configure-lsp) for the capability matrix, build instructions, settings, and SSH remote development.
+The three servers live in the `llvm-project` monorepo under `mlir/tools/`.
+Follow the [official MLIR Getting Started guide](https://mlir.llvm.org/getting_started/)
+to build them. A typical Unix-like flow is:
 
-## Screenshots
+```bash
+git clone https://github.com/llvm/llvm-project.git
+mkdir llvm-project/build && cd llvm-project/build
 
-### Out-of-Tree Dialect Highlighting
+cmake -G Ninja ../llvm \
+  -DLLVM_ENABLE_PROJECTS=mlir \
+  -DLLVM_TARGETS_TO_BUILD="Native" \
+  -DCMAKE_BUILD_TYPE=Release \
+  -DLLVM_ENABLE_ASSERTIONS=ON
 
-![Out-of-Tree Dialect Highlighting](https://raw.githubusercontent.com/felixtensor/zed-mlir-suite/assets/screenshots/downstream-triton.png)
+cmake --build . --target mlir-lsp-server mlir-pdll-lsp-server tblgen-lsp-server
+```
 
-### MLIR in C++ Raw Strings
+After a successful build, the binaries are in `llvm-project/build/bin/`.
+Configure each server's binary path directly in Zed. Alternatively, make that
+directory available on the worktree's `$PATH`.
 
-![MLIR in C++ Raw Strings](https://raw.githubusercontent.com/felixtensor/zed-mlir-suite/assets/screenshots/cpp-inject-mlir.png)
+If `mlir` is listed in `LLVM_ENABLE_PROJECTS` and you build the default `all`
+target, the three servers are produced with the rest of MLIR and do not need a
+separate build command.
 
-### Go to Definition
+### Configure Zed
 
-![Go to Definition](https://raw.githubusercontent.com/felixtensor/zed-mlir-suite/assets/screenshots/go-to-definition.gif)
+Configure each server under `lsp.<server-id>` in Zed's `settings.json`. The
+executable is resolved in this order: `binary.path`, then `settings.path`, then
+the worktree's `$PATH`.
 
-### Find References
+| Field | Type | Applies to | Description |
+|---|---|---|---|
+| `path` | `string` | All | Path to the server binary |
+| `compilation_database` | `string` | TableGen, PDLL | Path to the compilation-database YAML |
+| `extra_dirs` | `string[]` | TableGen, PDLL | Extra include directories |
+| `log` | `string` | All | Log verbosity: `"error"`, `"info"`, or `"verbose"` |
+| `pretty` | `bool` | All | Pretty-print JSON output |
 
-![Find References](https://raw.githubusercontent.com/felixtensor/zed-mlir-suite/assets/screenshots/find-references.gif)
+All fields are optional. When `compilation_database` is unset and
+`binary.arguments` does not already contain the corresponding database flag,
+the extension searches the worktree's `build/` and `out/` directories for the
+TableGen or PDLL compilation database.
 
-### Hover / Signature
+Zed's native `binary.path`, `binary.arguments`, and `binary.env` fields are also
+supported. `binary.path` selects the executable, `binary.arguments` supplies
+launch arguments, and `binary.env` overrides matching environment variables.
 
-![Hover / Signature](https://raw.githubusercontent.com/felixtensor/zed-mlir-suite/assets/screenshots/hover.gif)
+```jsonc
+{
+  "lsp": {
+    "mlir-lsp-server": {
+      "settings": {
+        "path": "/path/to/mlir-lsp-server",
+        "log": "verbose"
+      }
+    },
+    "tblgen-lsp-server": {
+      "settings": {
+        "path": "/path/to/tblgen-lsp-server",
+        "compilation_database": "/path/to/build/tablegen_compile_commands.yml",
+        "extra_dirs": [
+          "/path/to/llvm-project/llvm/include",
+          "/path/to/llvm-project/mlir/include"
+        ]
+      }
+    },
+    "mlir-pdll-lsp-server": {
+      "settings": {
+        "path": "/path/to/mlir-pdll-lsp-server",
+        "compilation_database": "/path/to/build/pdll_compile_commands.yml",
+        "extra_dirs": [
+          "/path/to/llvm-project/mlir/include"
+        ]
+      }
+    }
+  }
+}
+```
 
-### Completion
+After changing a server's launch settings, open the command palette and run
+`zed: restart language server`.
 
-![Completion](https://raw.githubusercontent.com/felixtensor/zed-mlir-suite/assets/screenshots/completion.gif)
+### SSH Remote Development
 
-### Diagnostics
+When a project is opened over SSH, the source code, language servers, tasks, and
+terminals run on the remote server; the local machine only runs the Zed UI. See
+Zed's [remote development documentation](https://zed.dev/docs/remote-development#zed-settings)
+for the full model.
 
-![Diagnostics](https://raw.githubusercontent.com/felixtensor/zed-mlir-suite/assets/screenshots/diagnostics.gif)
+Zed keeps the settings scopes separate, and editing one does not update another.
+`zed: open settings file` edits the local UI machine, `zed: open server settings`
+edits the remote server, and `zed: open project settings file` (or
+`.zed/settings.json`) applies to everyone opening that project. Configure the
+language-server binaries in the **remote server settings**, not the local
+settings file: if Zed runs on Windows but the project is opened on a Linux
+server, the `path` value must be a Linux path on the remote server.
 
-### Symbol Outline
+```jsonc
+{
+  "lsp": {
+    "mlir-lsp-server": {
+      "settings": {
+        "path": "/home/you/llvm-project/build/bin/mlir-lsp-server"
+      }
+    },
+    "tblgen-lsp-server": {
+      "settings": {
+        "path": "/home/you/llvm-project/build/bin/tblgen-lsp-server"
+      }
+    },
+    "mlir-pdll-lsp-server": {
+      "settings": {
+        "path": "/home/you/llvm-project/build/bin/mlir-pdll-lsp-server"
+      }
+    }
+  }
+}
+```
 
-![Symbol Outline](https://raw.githubusercontent.com/felixtensor/zed-mlir-suite/assets/screenshots/outline.gif)
-
-## Acknowledgements
-
-This extension builds on:
-
-- [MLIR](https://mlir.llvm.org) — the multi-level intermediate representation framework from the LLVM project.
-- [tree-sitter-mlir](https://github.com/felixtensor/tree-sitter-mlir) — Tree-sitter grammar for MLIR.
-- [tree-sitter-tablegen](https://github.com/felixtensor/tree-sitter-tablegen) — Tree-sitter grammar for TableGen.
-- [tree-sitter-pdll](https://github.com/felixtensor/tree-sitter-pdll) — Tree-sitter grammar for PDLL.
-- The three LSP servers (`mlir-lsp-server`, `mlir-pdll-lsp-server`, `tblgen-lsp-server`) are part of the [LLVM project](https://github.com/llvm/llvm-project).
-
-The out-of-tree dialect screenshot uses a TritonGPU test file from [Triton](https://github.com/triton-lang/triton).
-
-For MLIR tooling in other editors, see:
-
-- [vscode-mlir](https://github.com/llvm/vscode-mlir) — official VS Code extension for MLIR, PDLL, and TableGen.
-- [mlir-mode](https://github.com/llvm/llvm-project/tree/main/mlir/utils/emacs) — Emacs major mode and LSP client, shipped in the LLVM monorepo.
-
-## Feedback & Contributions
-
-Development priorities are tracked in the [roadmap](docs/ROADMAP.md). See [CONTRIBUTING.md](CONTRIBUTING.md) for issue reporting, development, and validation guidance. Participation is governed by the [Code of Conduct](CODE_OF_CONDUCT.md).
-
-- Use the [issue chooser](https://github.com/felixtensor/zed-mlir-suite/issues/new/choose) to report a bug, request a feature, or ask a setup question.
-- Follow the [pull request guidance](CONTRIBUTING.md#pull-requests) when submitting a change.
-
-## License
-
-Apache License 2.0 with LLVM Exceptions.
+The same rule applies to the other path-like settings: `compilation_database`
+must point to a file visible to the machine running the language server,
+`extra_dirs` must point to include directories visible to that same machine, and
+the auto-detected `build/` and `out/` compilation databases are searched relative
+to the worktree. Never put host-specific absolute paths — `C:\...` from a Windows
+UI host, or `/Applications/...` and Homebrew paths from a macOS UI host — into a
+project `.zed/settings.json` used by a Linux SSH workspace; the remote server
+cannot execute them.
