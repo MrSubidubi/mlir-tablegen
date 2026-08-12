@@ -1,143 +1,98 @@
 # yaml-language-server: $schema=https://json.schemastore.org/github-issue-forms.json
 name: Bug report
-description: Report a reproducible problem with this extension in Zed
+description: Something is broken in MLIR, TableGen, or PDLL support
 labels:
   - Bug
 body:
   - type: markdown
     attributes:
       value: |
-        Thanks for reporting a problem. Use this form even if you are unsure whether the cause is this extension, a pinned Tree-sitter parser, Zed, or an LLVM language server. The maintainers will triage the responsible layer.
+        File it here even if you are not sure whether the cause is this extension, a Tree-sitter parser ([mlir](https://github.com/felixtensor/tree-sitter-mlir), [tablegen](https://github.com/felixtensor/tree-sitter-tablegen), [pdll](https://github.com/felixtensor/tree-sitter-pdll)), Zed, or an LLVM language server. Working that out is triage, and triage is our job.
 
-        Before submitting, search the [existing issues](https://github.com/zed-extensions/mlir-tablegen/issues) for the same problem.
+        Please remove secrets, private paths, and proprietary source from anything you paste.
 
   - type: checkboxes
     id: preflight
     attributes:
       label: Before submitting
       options:
-        - label: I searched the existing issues and did not find the same problem.
-          required: true
-        - label: If I included examples, settings, or logs, I reviewed them and removed secrets, private paths, and proprietary source.
+        - label: I searched the existing issues and did not find this problem.
           required: true
 
   - type: dropdown
     id: languages
     attributes:
-      label: Affected language or context
-      description: Select every language or host context involved. Choose "Unsure" only when none of the other options applies. These choices help the maintainer apply the existing language labels.
+      label: Language
+      description: Pick every language involved.
       multiple: true
       options:
         - MLIR
         - TableGen
         - PDLL
         - C++ host or injected content
-        - Extension-wide or not language-specific
+        - Not language-specific
         - Unsure
     validations:
       required: true
 
   - type: dropdown
-    id: symptoms
+    id: area
     attributes:
-      label: What appears to be affected?
-      description: Optionally select the observable areas that seem relevant. The maintainers will determine the responsible layer and apply root-cause labels.
+      label: Area
+      description: A rough guess is fine — this only helps with labeling.
       multiple: true
       options:
-        - Parsing or syntax highlighting
+        - Syntax highlighting
         - Injected-language highlighting
-        - Language detection, comments, or word selection
-        - Auto-closing, bracket matching, or indentation
+        - Indentation, brackets, or comments
         - Symbol outline
-        - Language-server discovery, startup, or configuration
-        - Diagnostics, navigation, hover, or completion
-        - Dev-extension installation or build
-        - Documentation, CI, or release metadata
+        - Language-server discovery or configuration
+        - Language-server features (diagnostics, navigation, hover, completion)
+        - Installation, build, or packaging
+        - Documentation or repository metadata
         - Other or unsure
 
-  - type: dropdown
-    id: execution
-    attributes:
-      label: Execution environment
-      options:
-        - Local workspace
-        - SSH remote workspace
-        - Both local and SSH remote
-        - Not applicable or unsure
-    validations:
-      required: true
-
   - type: textarea
-    id: reproduction
+    id: what_happened
     attributes:
-      label: Reproduction steps
-      description: Explain how to reproduce the problem from opening the workspace or installing the dev extension.
+      label: What happened
+      description: How to reproduce it, what you saw, and what you expected instead.
       placeholder: |
-        1. Open ...
-        2. Confirm Zed identifies the file as ...
-        3. Type or run ...
-        4. Observe ...
-    validations:
-      required: true
+        1. Open a .mlir file containing ...
+        2. ...
 
-  - type: textarea
-    id: behavior
-    attributes:
-      label: Actual and expected behavior
-      placeholder: |
-        Actual: ...
         Expected: ...
+        Actual: ...
     validations:
       required: true
 
   - type: textarea
-    id: reproducer
+    id: example
     attributes:
-      label: Source, configuration, and syntax evidence
-      description: For parser, highlighting, or injection problems, provide the smallest relevant source and include the displayed language mode, theme, standalone versus injected behavior, and a syntax-tree fragment with any `ERROR` or `MISSING` nodes if available. For setup or build problems, commands, configuration, logs, or a minimal repository layout can replace source. This field supports Markdown and file attachments.
-    validations:
-      required: false
+      label: Minimal example
+      description: The smallest source, settings, or command that shows the problem. For a highlighting or parsing report, a syntax-tree fragment showing any `ERROR` or `MISSING` nodes helps. Screenshots and attachments are welcome.
 
   - type: textarea
     id: versions
     attributes:
-      label: Environment and versions
-      description: >-
-        Required for runtime, installation, language, query, and LSP problems.
-        In Zed, run `zed: copy system specs into clipboard`. Report the
-        extension version shown in Zed's extension panel, or `git rev-parse
-        --short HEAD` from the checkout if you installed a dev extension. For
-        documentation, CI, or metadata-only reports, enter `N/A` and identify
-        the affected file or workflow.
+      label: Versions
+      description: "In Zed, run `zed: copy system specs into clipboard`. For a dev extension, give the commit instead of a version. Enter `N/A` for documentation-only reports."
       placeholder: |
-        Zed: v...
+        Zed: ...
         Extension version or commit: ...
-        OS: ...
-        Architecture: ...
-        Installation: extension panel / dev extension
-        Last known working version, if any: ...
+        OS and architecture: ...
+        Workspace: local / SSH remote
     validations:
       required: true
 
   - type: textarea
     id: lsp
     attributes:
-      label: LLVM language-server details
-      description: For LSP problems, include the server name and version, installation or build source, executable actually used, discovery method, arguments, compilation database, include paths, whether the problem reproduces outside Zed, and which machine owns each path in SSH remote development.
+      label: Language server, settings, and logs
+      description: Only for language-server problems. Paste the relevant Zed settings and log lines.
       placeholder: |
         Server: mlir-lsp-server / mlir-pdll-lsp-server / tblgen-lsp-server
         LLVM version or commit: ...
-        Executable and discovery: binary.path / settings.path / $PATH
-        binary.arguments: ...
+        Resolved from: binary.path / settings.path / $PATH
         Compilation database and extra_dirs: ...
-        Reproduces outside Zed: yes / no / not tested
-    validations:
-      required: false
-
-  - type: textarea
-    id: diagnostics
-    attributes:
-      label: Relevant settings, logs, and related issues
-      description: Paste or attach only the relevant Zed settings and log lines. Include related Zed, LLVM, parser, or extension links when they already exist. Review all content for sensitive information before posting.
-    validations:
-      required: false
+        Also happens outside Zed: yes / no / not tested

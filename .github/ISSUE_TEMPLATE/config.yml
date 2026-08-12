@@ -1,9 +1,9 @@
 # yaml-language-server: $schema=https://json.schemastore.org/github-issue-config.json
 blank_issues_enabled: false
 contact_links:
-  - name: Confirmed general Zed editor issue
+  - name: Zed editor issue
     url: https://github.com/zed-industries/zed/issues/new/choose
-    about: Report editor, UI, theme, bundled C++, or LSP-client problems confirmed not to be specific to this extension.
-  - name: Confirmed LLVM or MLIR language-server issue
+    about: Editor, UI, theme, or LSP-client problems that also happen with this extension disabled.
+  - name: LLVM language-server issue
     url: https://github.com/llvm/llvm-project/issues/new/choose
-    about: Report server behavior confirmed to reproduce outside Zed with an LLVM language-server binary.
+    about: mlir-lsp-server, mlir-pdll-lsp-server, or tblgen-lsp-server behavior that also happens outside Zed.

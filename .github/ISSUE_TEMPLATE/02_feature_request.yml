@@ -1,73 +1,63 @@
 # yaml-language-server: $schema=https://json.schemastore.org/github-issue-forms.json
 name: Feature request
-description: Propose an improvement to MLIR, TableGen, or PDLL support in Zed
+description: Suggest an improvement to MLIR, TableGen, or PDLL support
 labels:
   - Enhancement
 body:
   - type: markdown
     attributes:
       value: |
-        Describe the workflow or limitation first, then the behavior you would like this extension to provide. You do not need to resolve the ownership boundary between the extension, its parser dependencies, Zed, and LLVM before submitting the request.
+        Describe the workflow you are after. You do not need to work out whether it belongs in this extension, a Tree-sitter parser ([mlir](https://github.com/felixtensor/tree-sitter-mlir), [tablegen](https://github.com/felixtensor/tree-sitter-tablegen), [pdll](https://github.com/felixtensor/tree-sitter-pdll)), Zed, or LLVM.
 
-        Before submitting, search the [existing issues](https://github.com/zed-extensions/mlir-tablegen/issues) for the same request.
+        Please remove secrets, private paths, and proprietary source from anything you paste.
 
   - type: checkboxes
     id: preflight
     attributes:
       label: Before submitting
       options:
-        - label: I searched the existing issues for the same request.
-          required: true
-        - label: If I included source, settings, screenshots, or other examples, I reviewed them and removed secrets, private paths, and proprietary content.
+        - label: I searched the existing issues and did not find this request.
           required: true
 
   - type: dropdown
     id: languages
     attributes:
-      label: Affected language or context
-      description: Choose "Unsure" only when none of the other options applies.
+      label: Language
+      description: Pick every language involved.
       multiple: true
       options:
         - MLIR
         - TableGen
         - PDLL
         - C++ host or injected content
-        - Extension-wide or not language-specific
+        - Not language-specific
         - Unsure
     validations:
       required: true
 
   - type: dropdown
-    id: capabilities
+    id: area
     attributes:
-      label: Requested capability
-      description: Select every relevant area. These choices do not automatically apply repository labels.
+      label: Area
+      description: A rough guess is fine — this only helps with labeling.
       multiple: true
       options:
-        - Tree-sitter parsing support
-        - Syntax highlighting or capture selection
-        - MLIR inside a C++ raw string
-        - C++ inside a PDLL code block
-        - C++ inside a TableGen code literal
-        - Language detection or editing configuration
-        - Auto-closing or bracket matching
-        - Indentation
+        - Tree-sitter parsing
+        - Syntax highlighting
+        - Language injection (MLIR in C++, C++ in PDLL or TableGen)
+        - Indentation, brackets, or comments
         - Symbol outline
-        - LSP executable discovery or configuration
-        - LLVM language-server navigation, capability, or editor integration
-        - Completion label styling
-        - Extension behavior in an SSH remote workspace
-        - Dev-extension installation, build, or packaging
+        - Language-server discovery or configuration
+        - Language-server features or completion styling
+        - Installation, build, or packaging
         - Documentation, tests, or CI
         - Other or unsure
-    validations:
-      required: true
 
   - type: textarea
     id: problem
     attributes:
-      label: Problem or workflow
-      description: Explain what you are trying to do, what currently blocks or slows you down, and who would benefit.
+      label: Problem
+      description: What are you trying to do, and what slows you down today?
     validations:
       required: true
 
@@ -75,30 +65,12 @@ body:
     id: proposal
     attributes:
       label: Proposed behavior
-      description: Describe the desired result. Include an example when the request concerns syntax, highlighting, outlines, completion labels, or configuration.
+      description: What should happen instead? An example of the syntax, outline, or setting you have in mind is worth a lot here.
     validations:
       required: true
 
   - type: textarea
-    id: example
+    id: context
     attributes:
-      label: Example source, configuration, or interaction
-      description: Add representative MLIR, TableGen, PDLL, C++, Zed settings, or step-by-step editor interaction when applicable.
-    validations:
-      required: false
-
-  - type: textarea
-    id: dependencies
-    attributes:
-      label: Dependency or ownership considerations
-      description: If known, explain whether the request may require a parser change, a Zed extension API, or new LLVM server behavior. It is acceptable to write that ownership is unknown.
-    validations:
-      required: false
-
-  - type: textarea
-    id: alternatives
-    attributes:
-      label: Alternatives and additional context
-      description: Describe current workarounds and add relevant screenshots, documentation, or related issues.
-    validations:
-      required: false
+      label: Alternatives and context
+      description: Current workarounds, screenshots, upstream links, or anything else that helps.

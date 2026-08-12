@@ -1,21 +1,15 @@
-## Objective
+## Summary
 
-<!-- Describe the user-visible problem or maintenance goal. Use `Fixes #<number>` for related issues in this repository and link relevant Zed, LLVM, or parser work when it already exists. -->
-
-## Solution
-
-<!-- Summarize the change and important tradeoffs. When relevant, explain why the change belongs in this extension rather than solely in Zed, LLVM, or a parser dependency. -->
+<!-- What changes, and why. Use `Fixes #<number>` for issues in this repository, and link related Zed, LLVM, or parser work when it already exists. -->
 
 ## Validation
 
-<!-- List the checks and manual testing actually performed, with the relevant environment. Mention anything important that was not tested. For documentation-only changes, `N/A — documentation-only` is sufficient. -->
+<!-- What you actually tested, and where (Zed version, OS, local or SSH). Note anything you could not test. `N/A — documentation only` is fine. -->
 
-## Evidence
-
-<!-- Optional: add a minimal source sample, before/after screenshot or GIF, syntax-tree fragment, query captures, or relevant log excerpt. Delete this section when it would not help review. Redact sensitive information. -->
+<!-- Optional, delete if unused: a minimal source sample, a before/after screenshot, a syntax-tree fragment, or a log excerpt. Redact sensitive information. -->
 
 ## Checklist
 
-- [ ] I reviewed my diff and kept this pull request focused.
-- [ ] I added or updated tests and documentation where relevant, or explained why they are not needed.
+- [ ] I reviewed my own diff and kept this pull request focused.
+- [ ] I updated documentation and tests where relevant, or explained why they are not needed.
 - [ ] I have the right to submit this contribution under the repository's Apache-2.0 WITH LLVM-exception license.

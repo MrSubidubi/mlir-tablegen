@@ -1,59 +1,37 @@
 # yaml-language-server: $schema=https://json.schemastore.org/github-issue-forms.json
-name: Setup or usage question
-description: Ask for help configuring or understanding this extension
+name: Question
+description: Ask about setup, configuration, or how something works
 labels:
   - Question
 body:
   - type: markdown
     attributes:
       value: |
-        Use this form for setup, configuration, and capability questions that are not yet a reproducible bug or a scoped feature request.
+        For anything that is not yet a reproducible bug or a scoped request. The README covers language-server setup, Zed configuration, and SSH remote development.
 
-        Check the [project documentation](https://github.com/zed-extensions/mlir-tablegen#readme) and [existing issues](https://github.com/zed-extensions/mlir-tablegen/issues) before submitting.
+        Please remove secrets, private paths, and proprietary source from anything you paste.
 
   - type: checkboxes
     id: preflight
     attributes:
       label: Before submitting
       options:
-        - label: I checked the relevant project documentation and existing issues for an answer.
-          required: true
-        - label: If I included settings, logs, or source, I reviewed them and removed secrets, private paths, and proprietary content.
+        - label: I checked the README and the existing issues.
           required: true
 
   - type: dropdown
     id: languages
     attributes:
-      label: Affected language or context
-      description: Choose "Unsure or not applicable" only when none of the other options applies.
+      label: Language
+      description: Pick every language involved.
       multiple: true
       options:
         - MLIR
         - TableGen
         - PDLL
         - C++ host or injected content
-        - Extension-wide or not language-specific
-        - Unsure or not applicable
-    validations:
-      required: true
-
-  - type: dropdown
-    id: topic
-    attributes:
-      label: Topic
-      multiple: true
-      options:
-        - Dev-extension installation or build
-        - MLIR, TableGen, or PDLL language behavior
-        - Syntax highlighting or capture selection
-        - Tree-sitter parsing
-        - LLVM language-server installation or discovery
-        - Compilation database or extra include directories
-        - Zed settings
-        - Extension behavior in an SSH remote workspace
-        - Supported versus upstream-dependent capability
-        - Contribution or development setup
-        - Other
+        - Not language-specific
+        - Unsure
     validations:
       required: true
 
@@ -61,22 +39,12 @@ body:
     id: question
     attributes:
       label: Question
-      description: State the outcome you want and the part that is unclear.
+      description: What are you trying to do, and which part is unclear?
     validations:
       required: true
 
   - type: textarea
-    id: attempted
+    id: context
     attributes:
-      label: Relevant context or what you have tried
-      description: Include relevant commands, documentation sections, settings, and observed output when applicable.
-    validations:
-      required: false
-
-  - type: textarea
-    id: environment
-    attributes:
-      label: Relevant environment details
-      description: Include Zed, extension, LLVM, OS, local or SSH remote, and language information when it affects the question.
-    validations:
-      required: false
+      label: Context
+      description: What you have tried, the relevant settings or commands and their output, and your Zed, extension, LLVM, and OS versions if they matter.
