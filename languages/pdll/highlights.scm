@@ -98,6 +98,7 @@
   ","
   ":"
   ";"
+  "."
 ] @punctuation.delimiter
 
 ;; Operators
@@ -105,5 +106,9 @@
   "="
   "=>"
   "->"
-  "."
 ] @operator
+
+;; The `.` in op<ns.name> separates two halves of one name rather than acting
+;; as member access, so it takes the surrounding @constant and the dotted name
+;; renders as a single unit. Must come AFTER the delimiter list above.
+(op_name "." @constant)
