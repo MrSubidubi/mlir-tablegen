@@ -85,7 +85,7 @@ pub trait LanguageServer {
                 Ok(parsed) => parsed,
                 Err(err) => {
                     eprintln!(
-                        "[mlir-suite] failed to parse lsp.{}.settings, \
+                        "[mlir-tablegen] failed to parse lsp.{}.settings, \
                          using defaults: {err}",
                         self.id(),
                     );

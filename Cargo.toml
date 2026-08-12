@@ -1,5 +1,5 @@
 [package]
-name = "zed-mlir-suite"
+name = "zed_mlir_tablegen"
 version = "0.6.2"
 edition = "2021"
 publish = false
