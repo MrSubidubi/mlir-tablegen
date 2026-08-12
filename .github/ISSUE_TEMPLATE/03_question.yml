@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=https://json.schemastore.org/github-issue-forms.json
 name: Setup or usage question
-description: Ask for help configuring or understanding MLIR Suite
+description: Ask for help configuring or understanding this extension
 labels:
   - Question
 body:
@@ -9,7 +9,7 @@ body:
       value: |
         Use this form for setup, configuration, and capability questions that are not yet a reproducible bug or a scoped feature request.
 
-        Check the [project documentation](https://github.com/felixtensor/zed-mlir-suite#readme) and [existing issues](https://github.com/felixtensor/zed-mlir-suite/issues) before submitting.
+        Check the [project documentation](https://github.com/zed-extensions/mlir-tablegen#readme) and [existing issues](https://github.com/zed-extensions/mlir-tablegen/issues) before submitting.
 
   - type: checkboxes
     id: preflight
@@ -50,7 +50,7 @@ body:
         - LLVM language-server installation or discovery
         - Compilation database or extra include directories
         - Zed settings
-        - MLIR Suite behavior in an SSH remote workspace
+        - Extension behavior in an SSH remote workspace
         - Supported versus upstream-dependent capability
         - Contribution or development setup
         - Other
@@ -77,6 +77,6 @@ body:
     id: environment
     attributes:
       label: Relevant environment details
-      description: Include Zed, MLIR Suite, LLVM, OS, local or SSH remote, and language information when it affects the question.
+      description: Include Zed, extension, LLVM, OS, local or SSH remote, and language information when it affects the question.
     validations:
       required: false

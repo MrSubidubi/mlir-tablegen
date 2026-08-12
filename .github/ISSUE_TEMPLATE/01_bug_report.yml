@@ -1,15 +1,15 @@
 # yaml-language-server: $schema=https://json.schemastore.org/github-issue-forms.json
 name: Bug report
-description: Report a reproducible problem with MLIR Suite in Zed
+description: Report a reproducible problem with this extension in Zed
 labels:
   - Bug
 body:
   - type: markdown
     attributes:
       value: |
-        Thanks for reporting a problem. Use this form even if you are unsure whether the cause is MLIR Suite, a pinned Tree-sitter parser, Zed, or an LLVM language server. The maintainer will triage the responsible layer.
+        Thanks for reporting a problem. Use this form even if you are unsure whether the cause is this extension, a pinned Tree-sitter parser, Zed, or an LLVM language server. The maintainers will triage the responsible layer.
 
-        Before submitting, search the [existing issues](https://github.com/felixtensor/zed-mlir-suite/issues) for the same problem.
+        Before submitting, search the [existing issues](https://github.com/zed-extensions/mlir-tablegen/issues) for the same problem.
 
   - type: checkboxes
     id: preflight
@@ -41,7 +41,7 @@ body:
     id: symptoms
     attributes:
       label: What appears to be affected?
-      description: Optionally select the observable areas that seem relevant. The maintainer will determine the responsible layer and apply root-cause labels.
+      description: Optionally select the observable areas that seem relevant. The maintainers will determine the responsible layer and apply root-cause labels.
       multiple: true
       options:
         - Parsing or syntax highlighting
@@ -104,16 +104,17 @@ body:
       label: Environment and versions
       description: >-
         Required for runtime, installation, language, query, and LSP problems.
-        In Zed, run `zed: copy system specs into clipboard`. From the MLIR Suite
-        checkout, run `git rev-parse --short HEAD` to get the dev-extension
-        commit. For documentation, CI, or metadata-only reports, enter `N/A`
-        and identify the affected file or workflow.
+        In Zed, run `zed: copy system specs into clipboard`. Report the
+        extension version shown in Zed's extension panel, or `git rev-parse
+        --short HEAD` from the checkout if you installed a dev extension. For
+        documentation, CI, or metadata-only reports, enter `N/A` and identify
+        the affected file or workflow.
       placeholder: |
         Zed: v...
-        MLIR Suite commit: ...
+        Extension version or commit: ...
         OS: ...
         Architecture: ...
-        Installation: dev extension
+        Installation: extension panel / dev extension
         Last known working version, if any: ...
     validations:
       required: true
@@ -137,6 +138,6 @@ body:
     id: diagnostics
     attributes:
       label: Relevant settings, logs, and related issues
-      description: Paste or attach only the relevant Zed settings and log lines. Include related Zed, LLVM, parser, or MLIR Suite links when they already exist. Review all content for sensitive information before posting.
+      description: Paste or attach only the relevant Zed settings and log lines. Include related Zed, LLVM, parser, or extension links when they already exist. Review all content for sensitive information before posting.
     validations:
       required: false

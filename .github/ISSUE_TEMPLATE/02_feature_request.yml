@@ -7,16 +7,16 @@ body:
   - type: markdown
     attributes:
       value: |
-        Describe the workflow or limitation first, then the behavior you would like MLIR Suite to provide. You do not need to resolve the ownership boundary between MLIR Suite, its parser dependencies, Zed, and LLVM before submitting the request.
+        Describe the workflow or limitation first, then the behavior you would like this extension to provide. You do not need to resolve the ownership boundary between the extension, its parser dependencies, Zed, and LLVM before submitting the request.
 
-        Before submitting, search the [existing issues](https://github.com/felixtensor/zed-mlir-suite/issues) and [roadmap](https://github.com/felixtensor/zed-mlir-suite/blob/main/docs/ROADMAP.md) for the same request.
+        Before submitting, search the [existing issues](https://github.com/zed-extensions/mlir-tablegen/issues) for the same request.
 
   - type: checkboxes
     id: preflight
     attributes:
       label: Before submitting
       options:
-        - label: I searched existing issues and the roadmap for the same request.
+        - label: I searched the existing issues for the same request.
           required: true
         - label: If I included source, settings, screenshots, or other examples, I reviewed them and removed secrets, private paths, and proprietary content.
           required: true
@@ -56,7 +56,7 @@ body:
         - LSP executable discovery or configuration
         - LLVM language-server navigation, capability, or editor integration
         - Completion label styling
-        - MLIR Suite behavior in an SSH remote workspace
+        - Extension behavior in an SSH remote workspace
         - Dev-extension installation, build, or packaging
         - Documentation, tests, or CI
         - Other or unsure
@@ -99,6 +99,6 @@ body:
     id: alternatives
     attributes:
       label: Alternatives and additional context
-      description: Describe current workarounds and add relevant screenshots, documentation, roadmap items, or related issues.
+      description: Describe current workarounds and add relevant screenshots, documentation, or related issues.
     validations:
       required: false
