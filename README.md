@@ -20,7 +20,8 @@ injects `raw_string_content` by delimiter, as in `R"mlir(…)mlir"`.
 The extension integrates the three language servers from the LLVM project:
 `mlir-lsp-server` for `.mlir`, `mlir-pdll-lsp-server` for `.pdll`, and
 `tblgen-lsp-server` for `.td`. They are optional — Tree-sitter highlighting,
-symbol outlines, bracket matching, and indentation work without them.
+symbol outlines, bracket matching, indentation, and Vim text objects work
+without them.
 
 Completion items from the MLIR and PDLL servers are classified by their LSP kind
 and detail, so values, blocks, dialects, operations, types, attributes,
@@ -210,3 +211,30 @@ to the worktree. Never put host-specific absolute paths — `C:\...` from a Wind
 UI host, or `/Applications/...` and Homebrew paths from a macOS UI host — into a
 project `.zed/settings.json` used by a Linux SSH workspace; the remote server
 cannot execute them.
+
+## Vim Text Objects
+
+With Zed's Vim mode enabled, the three languages support the function, class,
+and comment text objects — `af` / `if`, `ac` / `ic`, and `gc` in
+operator-pending mode. The `]m` / `[m`, `]]` / `[[`, and `]/` / `[/` motions
+read the same captures, but Zed bounds how deep in the syntax tree they search.
+In MLIR that bound is reached inside an explicit `module { ... }` wrapper, so
+those motions stop on top-level declarations only; the text objects themselves
+are unbounded and work at any nesting depth. PDLL and TableGen declarations sit
+well inside the bound.
+
+| Language | Function (`af` / `if`, `]m`) | Class (`ac` / `ic`, `]]`) |
+| --- | --- | --- |
+| MLIR | `func.func`, `llvm.func` | `module`, `builtin.module` |
+| PDLL | top-level `Pattern`, `Constraint`, `Rewrite` | — |
+| TableGen | named `def`, `defm` | `class`, `multiclass` |
+
+The mapping is deliberately conservative. `if` and `ic` select the body when
+there is one. Where there is none — `func.func private @f()`, a PDLL
+`Constraint Foo();`, a TableGen `class Fwd;`, or an empty `{}` body — Zed
+falls back to the `around` range, so `if` and `ic` select the same text as
+`af` and `ac`. PDLL's inline `Constraint` and `Rewrite` helpers are skipped in
+favor of the top-level declaration that encloses them, and TableGen's
+anonymous records are skipped so `]m` does not stop on definitions with no
+readable name. MLIR regions and blocks other than module bodies are ordinary
+nested operation bodies, not sections, so they are not treated as classes.
