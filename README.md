@@ -20,7 +20,8 @@ injects `raw_string_content` by delimiter, as in `R"mlir(…)mlir"`.
 The extension integrates the three language servers from the LLVM project:
 `mlir-lsp-server` for `.mlir`, `mlir-pdll-lsp-server` for `.pdll`, and
 `tblgen-lsp-server` for `.td`. They are optional — Tree-sitter highlighting,
-symbol outlines, bracket matching, and indentation work without them.
+symbol outlines, bracket matching, indentation, and Vim text objects work
+without them.
 
 Completion items from the MLIR and PDLL servers are classified by their LSP kind
 and detail, so values, blocks, dialects, operations, types, attributes,
@@ -210,3 +211,19 @@ to the worktree. Never put host-specific absolute paths — `C:\...` from a Wind
 UI host, or `/Applications/...` and Homebrew paths from a macOS UI host — into a
 project `.zed/settings.json` used by a Linux SSH workspace; the remote server
 cannot execute them.
+
+## Vim Text Objects
+
+| Language | Function (`af` / `if`, `]m`) | Class (`ac` / `ic`) |
+| --- | --- | --- |
+| MLIR | `func.func`, `llvm.func` | `module`, `builtin.module` |
+| PDLL | top-level `Pattern`, `Constraint`, `Rewrite` | — |
+| TableGen | named `def`, `defm` | `class`, `multiclass` |
+
+`gc` takes the surrounding run of comments in all three. Anonymous TableGen
+records and PDLL's inline `Constraint` / `Rewrite` helpers are skipped in favor
+of the declaration enclosing them.
+
+Zed bounds how deep the motions search but not the text objects. In MLIR that
+bound falls inside an explicit `module { ... }`, so `]]` stops on the module and
+`]m` has nothing to visit, while `af` and `ac` keep working at any depth.
