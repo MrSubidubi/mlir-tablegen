@@ -12,7 +12,7 @@ problem comes from a parser, a query, Zed, or another dependency before
 reporting it. Provide the smallest useful reproducer and the maintainer will
 triage the responsible layer.
 
-Search the [existing issues](https://github.com/felixtensor/mlir-tablegen/issues)
+Search the [existing issues](https://github.com/felixtensor/zed-mlir/issues)
 and the [roadmap](docs/ROADMAP.md) before opening a report. Use the Bug, Feature,
 or Question form so the report contains the information needed for triage.
 

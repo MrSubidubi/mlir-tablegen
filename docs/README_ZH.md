@@ -3,10 +3,10 @@
 [![EN](https://img.shields.io/badge/lang-EN-lightgrey?style=flat-square)](../README.md)
 [![中文](https://img.shields.io/badge/lang-中文-red?style=flat-square)](README_ZH.md)
 
-[![CI](https://img.shields.io/github/actions/workflow/status/felixtensor/mlir-tablegen/ci.yml?style=flat-square&logo=githubactions&logoColor=white&label=CI)](https://github.com/felixtensor/mlir-tablegen/actions/workflows/ci.yml)
-[![Version](https://img.shields.io/github/v/tag/felixtensor/mlir-tablegen?style=flat-square&logo=github&label=version)](https://github.com/felixtensor/mlir-tablegen/tags)
+[![CI](https://img.shields.io/github/actions/workflow/status/felixtensor/zed-mlir/ci.yml?style=flat-square&logo=githubactions&logoColor=white&label=CI)](https://github.com/felixtensor/zed-mlir/actions/workflows/ci.yml)
+[![Version](https://img.shields.io/github/v/tag/felixtensor/zed-mlir?style=flat-square&logo=github&label=version)](https://github.com/felixtensor/zed-mlir/tags)
 [![License](https://img.shields.io/badge/license-Apache%202.0%20with%20LLVM%20Exceptions-blue?style=flat-square&logo=apache&logoColor=white)](../LICENSE)
-[![Stars](https://img.shields.io/github/stars/felixtensor/mlir-tablegen?style=flat-square&logo=github)](https://github.com/felixtensor/mlir-tablegen/stargazers)
+[![Stars](https://img.shields.io/github/stars/felixtensor/zed-mlir?style=flat-square&logo=github)](https://github.com/felixtensor/zed-mlir/stargazers)
 
 为 [Zed](https://zed.dev) 编辑器提供 [MLIR](https://mlir.llvm.org)、[TableGen](https://llvm.org/docs/TableGen/) 和 [PDLL](https://mlir.llvm.org/docs/PDLL/) 支持。
 
@@ -38,7 +38,7 @@
 若想改用本地检出运行 —— 例如试用尚未发布的改动，或参与本扩展的开发 —— 先克隆仓库：
 
 ```bash
-git clone https://github.com/felixtensor/mlir-tablegen.git
+git clone https://github.com/felixtensor/zed-mlir.git
 ```
 
 然后打开命令面板（macOS 按 `Cmd+Shift+P`，Linux/Windows 按 `Ctrl+Shift+P`），执行 **`zed: install dev extension`** 并选择克隆的目录。Zed 会在安装时将扩展编译为 WebAssembly，因此这条路径需要通过 [rustup](https://rustup.rs) 安装的 stable Rust 工具链。首次构建需要拉取依赖，可能耗时一两分钟；若失败，执行 **`zed: open log`** 查看详细信息。
@@ -83,35 +83,35 @@ git clone https://github.com/felixtensor/mlir-tablegen.git
 
 ### 外部 dialect 高亮
 
-![Out-of-Tree Dialect Highlighting](https://raw.githubusercontent.com/felixtensor/mlir-tablegen/assets/screenshots/downstream-triton.png)
+![Out-of-Tree Dialect Highlighting](https://raw.githubusercontent.com/felixtensor/zed-mlir/assets/screenshots/downstream-triton.png)
 
 ### C++ raw string 内嵌 MLIR
 
-![MLIR in C++ Raw Strings](https://raw.githubusercontent.com/felixtensor/mlir-tablegen/assets/screenshots/cpp-inject-mlir.png)
+![MLIR in C++ Raw Strings](https://raw.githubusercontent.com/felixtensor/zed-mlir/assets/screenshots/cpp-inject-mlir.png)
 
 ### 跳转到定义
 
-![Go to Definition](https://raw.githubusercontent.com/felixtensor/mlir-tablegen/assets/screenshots/go-to-definition.gif)
+![Go to Definition](https://raw.githubusercontent.com/felixtensor/zed-mlir/assets/screenshots/go-to-definition.gif)
 
 ### 查找引用
 
-![Find References](https://raw.githubusercontent.com/felixtensor/mlir-tablegen/assets/screenshots/find-references.gif)
+![Find References](https://raw.githubusercontent.com/felixtensor/zed-mlir/assets/screenshots/find-references.gif)
 
 ### 悬停 / 签名
 
-![Hover / Signature](https://raw.githubusercontent.com/felixtensor/mlir-tablegen/assets/screenshots/hover.gif)
+![Hover / Signature](https://raw.githubusercontent.com/felixtensor/zed-mlir/assets/screenshots/hover.gif)
 
 ### 补全
 
-![Completion](https://raw.githubusercontent.com/felixtensor/mlir-tablegen/assets/screenshots/completion.gif)
+![Completion](https://raw.githubusercontent.com/felixtensor/zed-mlir/assets/screenshots/completion.gif)
 
 ### 诊断
 
-![Diagnostics](https://raw.githubusercontent.com/felixtensor/mlir-tablegen/assets/screenshots/diagnostics.gif)
+![Diagnostics](https://raw.githubusercontent.com/felixtensor/zed-mlir/assets/screenshots/diagnostics.gif)
 
 ### 符号大纲
 
-![Symbol Outline](https://raw.githubusercontent.com/felixtensor/mlir-tablegen/assets/screenshots/outline.gif)
+![Symbol Outline](https://raw.githubusercontent.com/felixtensor/zed-mlir/assets/screenshots/outline.gif)
 
 ## 致谢
 
@@ -134,7 +134,7 @@ git clone https://github.com/felixtensor/mlir-tablegen.git
 
 开发方向和优先级记录在 [路线图](ROADMAP.md) 中（仅英文）。[贡献指南](../CONTRIBUTING.md)（仅英文）说明了 Issue 报告、开发与验证要求。
 
-- 通过 [Issue 选择器](https://github.com/felixtensor/mlir-tablegen/issues/new/choose) 报告错误、提出功能请求或咨询配置问题。
+- 通过 [Issue 选择器](https://github.com/felixtensor/zed-mlir/issues/new/choose) 报告错误、提出功能请求或咨询配置问题。
 - 提交改动时，请遵循 [拉取请求指南](../CONTRIBUTING.md#pull-requests)。
 
 ## 许可证

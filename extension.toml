@@ -1,13 +1,13 @@
 id = "mlir-tablegen"
 name = "MLIR"
 description = "MLIR, TableGen, and PDLL support."
-version = "0.6.2"
+version = "0.6.3"
 schema_version = 1
 authors = [
     "felixtensor <xubuyun@outlook.com>",
     "feichai0017 <songguocheng348@gmail.com>",
 ]
-repository = "https://github.com/felixtensor/mlir-tablegen"
+repository = "https://github.com/felixtensor/zed-mlir"
 
 [grammars.mlir]
 repository = "https://github.com/felixtensor/tree-sitter-mlir"

@@ -44,6 +44,6 @@ For shipped milestones and tag-by-tag release history, see [CHANGELOG.md](../CHA
 
 ## How to propose changes
 
-Open an issue at [felixtensor/mlir-tablegen](https://github.com/felixtensor/mlir-tablegen/issues) with:
+Open an issue at [felixtensor/zed-mlir](https://github.com/felixtensor/zed-mlir/issues) with:
 - What problem you hit or what workflow you want,
 - Any pointers to upstream LLVM docs or related issues.

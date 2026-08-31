@@ -1,13 +1,13 @@
 # Changelog
 
 This document records shipped project history reconstructed from the local Git
-tags, plus an `[Unreleased]` section for work merged since the last tag. Dates
-are tag or commit dates. The v0.1.0 tag was restored retroactively on the last
-commit that still declared version 0.1.0.
+tags, plus an `[Unreleased]` section when work has landed since the last tag.
+Dates are tag or commit dates. The v0.1.0 tag was restored retroactively on the
+last commit that still declared version 0.1.0.
 
 For future plans, see [docs/ROADMAP.md](docs/ROADMAP.md).
 
-## [Unreleased]
+## [v0.6.3] - 2026-09-01
 
 ### Added
 
@@ -19,12 +19,15 @@ For future plans, see [docs/ROADMAP.md](docs/ROADMAP.md).
 
 ### Changed
 
-- Renamed the extension to `mlir-tablegen` and the crate to
+- Adopted the extension id `mlir-tablegen` and renamed the crate to
   `zed_mlir_tablegen`, taking over the existing registry entry rather than
   publishing a second one under the old id.
-- Corrected the `repository` metadata to `felixtensor/mlir-tablegen`. It had
-  been pointed at the `zed-extensions` transfer target ahead of a transfer that
-  did not happen, leaving the published link unresolvable.
+- Renamed the repository to `zed-mlir`, and pointed the `repository` metadata
+  and every documentation link at it. The field had been aimed at the
+  `zed-extensions` transfer target ahead of a transfer that did not happen,
+  leaving the published link unresolvable. The extension id is unchanged: the
+  registry publishes this entry under `mlir-tablegen`, and ids may not change
+  between versions.
 - Updated the MLIR grammar to tree-sitter-mlir v0.2.0. The READMEs now link the
   parser's own corpus documentation instead of restating its file and dialect
   counts, which went stale on every parser update.
@@ -331,17 +334,17 @@ For future plans, see [docs/ROADMAP.md](docs/ROADMAP.md).
   [`felixtensor/tree-sitter-mlir`](https://github.com/felixtensor/tree-sitter-mlir)
   before the first tagged baseline.
 
-[Unreleased]: https://github.com/felixtensor/mlir-tablegen/compare/v0.6.2...HEAD
-[v0.6.2]: https://github.com/felixtensor/mlir-tablegen/compare/v0.6.1...v0.6.2
-[v0.6.1]: https://github.com/felixtensor/mlir-tablegen/compare/v0.6.0...v0.6.1
-[v0.6.0]: https://github.com/felixtensor/mlir-tablegen/compare/v0.5.3...v0.6.0
-[v0.5.3]: https://github.com/felixtensor/mlir-tablegen/compare/v0.5.2...v0.5.3
-[v0.5.2]: https://github.com/felixtensor/mlir-tablegen/compare/v0.5.1...v0.5.2
-[v0.5.1]: https://github.com/felixtensor/mlir-tablegen/compare/v0.5.0...v0.5.1
-[v0.5.0]: https://github.com/felixtensor/mlir-tablegen/compare/v0.4.0...v0.5.0
-[v0.4.0]: https://github.com/felixtensor/mlir-tablegen/compare/v0.3.1...v0.4.0
-[v0.3.1]: https://github.com/felixtensor/mlir-tablegen/compare/v0.3.0...v0.3.1
-[v0.3.0]: https://github.com/felixtensor/mlir-tablegen/compare/v0.2.1...v0.3.0
-[v0.2.1]: https://github.com/felixtensor/mlir-tablegen/compare/v0.2.0...v0.2.1
-[v0.2.0]: https://github.com/felixtensor/mlir-tablegen/compare/v0.1.0...v0.2.0
-[v0.1.0]: https://github.com/felixtensor/mlir-tablegen/releases/tag/v0.1.0
+[v0.6.3]: https://github.com/felixtensor/zed-mlir/compare/v0.6.2...v0.6.3
+[v0.6.2]: https://github.com/felixtensor/zed-mlir/compare/v0.6.1...v0.6.2
+[v0.6.1]: https://github.com/felixtensor/zed-mlir/compare/v0.6.0...v0.6.1
+[v0.6.0]: https://github.com/felixtensor/zed-mlir/compare/v0.5.3...v0.6.0
+[v0.5.3]: https://github.com/felixtensor/zed-mlir/compare/v0.5.2...v0.5.3
+[v0.5.2]: https://github.com/felixtensor/zed-mlir/compare/v0.5.1...v0.5.2
+[v0.5.1]: https://github.com/felixtensor/zed-mlir/compare/v0.5.0...v0.5.1
+[v0.5.0]: https://github.com/felixtensor/zed-mlir/compare/v0.4.0...v0.5.0
+[v0.4.0]: https://github.com/felixtensor/zed-mlir/compare/v0.3.1...v0.4.0
+[v0.3.1]: https://github.com/felixtensor/zed-mlir/compare/v0.3.0...v0.3.1
+[v0.3.0]: https://github.com/felixtensor/zed-mlir/compare/v0.2.1...v0.3.0
+[v0.2.1]: https://github.com/felixtensor/zed-mlir/compare/v0.2.0...v0.2.1
+[v0.2.0]: https://github.com/felixtensor/zed-mlir/compare/v0.1.0...v0.2.0
+[v0.1.0]: https://github.com/felixtensor/zed-mlir/releases/tag/v0.1.0

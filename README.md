@@ -3,10 +3,10 @@
 [![EN](https://img.shields.io/badge/lang-EN-blue?style=flat-square)](README.md)
 [![中文](https://img.shields.io/badge/lang-中文-lightgrey?style=flat-square)](docs/README_ZH.md)
 
-[![CI](https://img.shields.io/github/actions/workflow/status/felixtensor/mlir-tablegen/ci.yml?style=flat-square&logo=githubactions&logoColor=white&label=CI)](https://github.com/felixtensor/mlir-tablegen/actions/workflows/ci.yml)
-[![Version](https://img.shields.io/github/v/tag/felixtensor/mlir-tablegen?style=flat-square&logo=github&label=version)](https://github.com/felixtensor/mlir-tablegen/tags)
+[![CI](https://img.shields.io/github/actions/workflow/status/felixtensor/zed-mlir/ci.yml?style=flat-square&logo=githubactions&logoColor=white&label=CI)](https://github.com/felixtensor/zed-mlir/actions/workflows/ci.yml)
+[![Version](https://img.shields.io/github/v/tag/felixtensor/zed-mlir?style=flat-square&logo=github&label=version)](https://github.com/felixtensor/zed-mlir/tags)
 [![License](https://img.shields.io/badge/license-Apache%202.0%20with%20LLVM%20Exceptions-blue?style=flat-square&logo=apache&logoColor=white)](LICENSE)
-[![Stars](https://img.shields.io/github/stars/felixtensor/mlir-tablegen?style=flat-square&logo=github)](https://github.com/felixtensor/mlir-tablegen/stargazers)
+[![Stars](https://img.shields.io/github/stars/felixtensor/zed-mlir?style=flat-square&logo=github)](https://github.com/felixtensor/zed-mlir/stargazers)
 
 [MLIR](https://mlir.llvm.org), [TableGen](https://llvm.org/docs/TableGen/), and [PDLL](https://mlir.llvm.org/docs/PDLL/) support for the [Zed](https://zed.dev) editor.
 
@@ -38,7 +38,7 @@ Open the extension gallery with `Cmd+Shift+X` on macOS or `Ctrl+Shift+X` on Linu
 To run a local checkout instead — to try an unreleased change, or to work on the extension itself — clone the repository:
 
 ```bash
-git clone https://github.com/felixtensor/mlir-tablegen.git
+git clone https://github.com/felixtensor/zed-mlir.git
 ```
 
 Then open the command palette (`Cmd+Shift+P` on macOS, `Ctrl+Shift+P` on Linux/Windows) and run **`zed: install dev extension`**, selecting the cloned directory. Zed compiles the extension to WebAssembly on install, so this path needs a stable Rust toolchain from [rustup](https://rustup.rs). The first build fetches dependencies and may take a minute or two; **`zed: open log`** has the details if it fails.
@@ -83,35 +83,35 @@ See [Vim Mode](docs/VIM_MODE.md) for how each mapping follows the grammar's node
 
 ### Out-of-Tree Dialect Highlighting
 
-![Out-of-Tree Dialect Highlighting](https://raw.githubusercontent.com/felixtensor/mlir-tablegen/assets/screenshots/downstream-triton.png)
+![Out-of-Tree Dialect Highlighting](https://raw.githubusercontent.com/felixtensor/zed-mlir/assets/screenshots/downstream-triton.png)
 
 ### MLIR in C++ Raw Strings
 
-![MLIR in C++ Raw Strings](https://raw.githubusercontent.com/felixtensor/mlir-tablegen/assets/screenshots/cpp-inject-mlir.png)
+![MLIR in C++ Raw Strings](https://raw.githubusercontent.com/felixtensor/zed-mlir/assets/screenshots/cpp-inject-mlir.png)
 
 ### Go to Definition
 
-![Go to Definition](https://raw.githubusercontent.com/felixtensor/mlir-tablegen/assets/screenshots/go-to-definition.gif)
+![Go to Definition](https://raw.githubusercontent.com/felixtensor/zed-mlir/assets/screenshots/go-to-definition.gif)
 
 ### Find References
 
-![Find References](https://raw.githubusercontent.com/felixtensor/mlir-tablegen/assets/screenshots/find-references.gif)
+![Find References](https://raw.githubusercontent.com/felixtensor/zed-mlir/assets/screenshots/find-references.gif)
 
 ### Hover / Signature
 
-![Hover / Signature](https://raw.githubusercontent.com/felixtensor/mlir-tablegen/assets/screenshots/hover.gif)
+![Hover / Signature](https://raw.githubusercontent.com/felixtensor/zed-mlir/assets/screenshots/hover.gif)
 
 ### Completion
 
-![Completion](https://raw.githubusercontent.com/felixtensor/mlir-tablegen/assets/screenshots/completion.gif)
+![Completion](https://raw.githubusercontent.com/felixtensor/zed-mlir/assets/screenshots/completion.gif)
 
 ### Diagnostics
 
-![Diagnostics](https://raw.githubusercontent.com/felixtensor/mlir-tablegen/assets/screenshots/diagnostics.gif)
+![Diagnostics](https://raw.githubusercontent.com/felixtensor/zed-mlir/assets/screenshots/diagnostics.gif)
 
 ### Symbol Outline
 
-![Symbol Outline](https://raw.githubusercontent.com/felixtensor/mlir-tablegen/assets/screenshots/outline.gif)
+![Symbol Outline](https://raw.githubusercontent.com/felixtensor/zed-mlir/assets/screenshots/outline.gif)
 
 ## Acknowledgements
 
@@ -134,7 +134,7 @@ For MLIR tooling in other editors, see:
 
 Development priorities are tracked in the [roadmap](docs/ROADMAP.md). See [CONTRIBUTING.md](CONTRIBUTING.md) for issue reporting, development, and validation guidance.
 
-- Use the [issue chooser](https://github.com/felixtensor/mlir-tablegen/issues/new/choose) to report a bug, request a feature, or ask a setup question.
+- Use the [issue chooser](https://github.com/felixtensor/zed-mlir/issues/new/choose) to report a bug, request a feature, or ask a setup question.
 - Follow the [pull request guidance](CONTRIBUTING.md#pull-requests) when submitting a change.
 
 ## License
